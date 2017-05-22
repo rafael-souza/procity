@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plc="http://www.powerlogic.com.br/plc" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition template="/fcls/template/PlcGeralTemplate.xhtml"> 
+		<ui:define name="plc-corpo-formulario"> 
+		    <h:head>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkxuiS8j3jIGWhW3y-sKs4_ms_H09tj7s"></script> 
+    </h:head>	
+			<div id="plc-form-baco"> 
+				<div id="#{plcAliasPrefixoAction}Arg" class="plc-form-basico-topo"> 
+					<plcf:tabela tituloChave="mapaocorrenciasarg.titulo"> 										
+						<plcf:linha> 
+							<plcf:celula> 								
+								<plcf:titulo value="#{msg['label.id']}"/>  
+								<plcf:numerico id="id" value="#{mapaocorrencias.id}" ajudaChave="ajuda.id" tamanho="5"/> 								
+							</plcf:celula>  
+							<plcf:celula> 
+								<plcf:titulo value="#{msg['label.tipoOcorrencia']}"/>  
+								<plcf:comboDinamico id="tipoOcorrencia" value="#{mapaocorrencias.tipoOcorrencia}" dominio="TipoOcorrenciaEntity" exibeBranco="S" ajudaChave="ajuda.tipoOcorrencia"/> 								
+							</plcf:celula>  
+							<plcf:celula> 							
+								<plcf:titulo value="#{msg['label.dataOcorrencia']}"/>  
+								<plcf:data id="dataOcorrencia" value="#{mapaocorrencias.dataOcorrencia}" ajudaChave="ajuda.dataOcorrencia"/> 								
+							</plcf:celula>  
+							<plcf:celula> 								
+								<plcf:titulo value="#{msg['label.dataConclusao']}"/>  
+								<plcf:data id="dataConclusao" value="#{mapaocorrencias.dataConclusao}" ajudaChave="ajuda.dataConclusao"/> 								
+							</plcf:celula>  
+							<plcf:celula> 								
+								<plcf:titulo value="#{msg['label.statusOcorrencia']}"/>  
+								<plcf:comboEstatico id="statusOcorrencia" value="#{mapaocorrencias.statusOcorrencia}" dominio="StatusOcorrencia" exibeBranco="S" ajudaChave="ajuda.statusOcorrencia"/> 								
+							</plcf:celula> 
+						</plcf:linha> 
+					</plcf:tabela> 
+					 
+					
+					<div id="#{plcAliasPrefixoAction}Sel" class="_plc-form-basico-sel"> 
+					<fieldset class="plc-fieldset"> 
+						<legend class="plc-fieldset-legend">Resultados</legend>  
+						<plcf:iteracao var="item" value="#{mapaocorrenciasLista.itensPlc}" styleClass="plc-table-tabsel delimitador tabelaFormulario plc-table-seljsf" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
+							<h:column> 
+								<f:facet name="header"> 
+									<span class="plc-title af_outputLabel"> 
+										<h:outputText value="#{msg['label.id']}"/> 
+									</span> 
+								</f:facet>  
+								<plcf:exibe value="#{item.id}" classeCSS="idItem">id</plcf:exibe> 
+							</h:column>  
+							<h:column> 
+								<f:facet name="header"> 
+									<span class="plc-title af_outputLabel"> 
+										<h:outputText value="#{msg['label.tipoOcorrencia']}"/> 
+									</span> 
+								</f:facet>  
+								<plcf:exibe value="#{item.tipoOcorrencia}">tipoOcorrencia</plcf:exibe> 
+							</h:column>  
+							<h:column> 
+								<f:facet name="header"> 
+									<span class="plc-title af_outputLabel"> 
+										<h:outputText value="#{msg['label.dataOcorrencia']}"/> 
+									</span> 
+								</f:facet>  
+								<plcf:exibe value="#{item.dataOcorrencia}">dataOcorrencia</plcf:exibe> 
+							</h:column>  
+							<h:column> 
+								<f:facet name="header"> 
+									<span class="plc-title af_outputLabel"> 
+										<h:outputText value="#{msg['label.dataConclusao']}"/> 
+									</span> 
+								</f:facet>  
+								<plcf:exibe value="#{item.dataConclusao}">dataConclusao</plcf:exibe> 
+							</h:column>  
+							<h:column> 
+								<f:facet name="header"> 
+									<span class="plc-title af_outputLabel"> 
+										<h:outputText value="#{msg['label.statusOcorrencia']}"/> 
+									</span> 
+								</f:facet>  
+								<plcf:exibe value="#{item.statusOcorrencia}">statusOcorrencia</plcf:exibe> 
+							</h:column>  
+							<h:column> 
+								<f:facet name="header"> 
+									<span class="plc-title af_outputLabel"> 
+										<h:outputText value="#{msg['label.pessoa']}"/> 
+									</span> 
+								</f:facet>  
+								<plcf:exibe value="#{item.pessoa}">pessoa</plcf:exibe> 
+							</h:column>  
+							<h:column> 
+								<f:facet name="header"> 
+									<span class="plc-title af_outputLabel"> 
+										<h:outputText value="#{msg['label.responsavelConclusao']}"/> 
+									</span> 
+								</f:facet>  
+								<plcf:exibe value="#{item.responsavelConclusao}">responsavelConclusao</plcf:exibe> 
+							</h:column>  
+							<h:column> 
+								<f:facet name="header"> 
+									<span class="plc-title af_outputLabel"> 
+										<h:outputText value="#{msg['label.latitude']}"/> 
+									</span> 
+								</f:facet>  
+								<plcf:exibe value="#{item.latitude}">latitude</plcf:exibe> 
+							</h:column>  
+							<h:column> 
+								<f:facet name="header"> 
+									<span class="plc-title af_outputLabel"> 
+										<h:outputText value="#{msg['label.longitude']}"/> 
+									</span> 
+								</f:facet>  
+								<plcf:exibe value="#{item.longitude}">longitude</plcf:exibe> 
+							</h:column> 
+						</plcf:iteracao> 
+					</fieldset>  
+						<script>createLineSelection('#{request.contextPath}/f/n/ocorrenciaman');</script> 
+					</div> 		
+				</div>				
+
+<fieldset class="plc-fieldset plc-fieldset-embutido">
+						<legend class="plc-fieldset-legend">Mapa de Ocorrências</legend>
+						<plcf:tabela>
+							<plcf:linha> 
+								<plcf:celula columnSpan="5" inlineStyle="padding-left: 1%;">	
+									<f:view contentType="text/html">						
+										<p:gmap center="#{plcAction.latitude}, #{plcAction.longitude}" zoom="14" type="roadmap" 
+											style="width:1200px;height:400px"  model="#{plcAction.advancedModel}">
+
+				          					<p:ajax event="overlaySelect" listener="#{plcAction.onMarkerSelect}" />
+				 
+				        					<p:gmapInfoWindow id="infoWindow">
+				            					<p:outputPanel style="text-align: center; display: block; margin: auto">                     
+				                    				<h:outputText value="#{plcAction.marker.title}" />
+				 								</p:outputPanel>
+				        					</p:gmapInfoWindow>
+				        				</p:gmap>
+									</f:view>
+								</plcf:celula>
+							</plcf:linha>
+						</plcf:tabela> 
+					</fieldset > 
+
+
+			</div>
+		<script type="text/javascript">//<![CDATA[
+        function aposSelecaoModal(data) {
+            var status = data.status;
+            switch (status) {
+                case "success":
+                    var optsSel = {
+        				$tabela: plc.jq("table#"+prefixForm+'#{plcAliasPrefixoAction}')
+        				,urlEdicao:'#{request.contextPath}/f/n/ocorrenciaman'
+        				,numPorPagina: 50
+            			,propAgregada: 'mapaocorrencias'
+            			,nomePropAgregada: "nome"
+            			,paramEdicao: "id"
+        				,modoJanelaPlc:'${param.modoJanelaPlc}'
+                	}
+					montarSelecaoSemGrid(optsSel);
+                break;
+            }
+        }
+        // Setup the statusUpdate function to hear all events on the page
+        jsf.ajax.addOnEvent(aposSelecaoModal);
+		//]]> </script>  
+			<div id="#{plcAliasPrefixoAction}Nav" class="plc-navegacao"> 
+				<ui:include src="/WEB-INF/fcls-plc/geralPaginacaoLogicaItens.xhtml"/> 
+			</div> 			
+		</ui:define>
+	</ui:composition> 
+</html>

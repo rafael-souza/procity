@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plc="http://www.powerlogic.com.br/plc" 
+	xmlns:plcf="http://www.powerlogic.com.br/plcf"  
+	xmlns:plct="http://www.powerlogic.com.br/plct"
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition> 
+
+		<plcf:tabela tituloChave="ocorrenciaman.titulo"> 
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.id']}"/>  
+					<plcf:oid id="id" value="#{ocorrencia.id}" ajudaChave="ajuda.id"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.pessoa']}"/>  
+					<plc:vinculado id="pessoa" value="#{ocorrencia.pessoa}" propSelPop="pessoaEntity" idExibe="S" idSomenteLeitura="N" autoRecuperacaoClasse="br.net.proex.entity.PessoaEntity" actionSel="pessoaentitysel" modal="S" ajudaChave="ajuda.pessoa" onkeydown="selecionaPorTecla(event,this);" obrigatorio="S"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.tipoOcorrencia']}"/>  
+					<plcf:comboDinamico id="tipoOcorrencia" value="#{ocorrencia.tipoOcorrencia}" dominio="TipoOcorrenciaEntity" exibeBranco="S" ajudaChave="ajuda.tipoOcorrencia" showRequired="true"/> 
+				</plcf:celula> 
+
+				<plcf:celula rowSpan="3">									
+					<plct:fileAttach property="fotoOcorrencia"  />
+				</plcf:celula>	
+
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.dataOcorrencia']}"/>  
+					<plcf:data id="dataOcorrencia" value="#{ocorrencia.dataOcorrencia}" ajudaChave="ajuda.dataOcorrencia" showRequired="true"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.latitude']}"/>  
+					<plcf:texto id="latitude" value="#{ocorrencia.latitude}" ajudaChave="ajuda.latitude" showRequired="true"/> 
+				</plcf:celula>  
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.longitude']}"/>  
+					<plcf:texto id="longitude" value="#{ocorrencia.longitude}" ajudaChave="ajuda.longitude" showRequired="true"/> 
+				</plcf:celula> 
+			</plcf:linha>  
+			<plcf:linha> 
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.statusOcorrencia']}"/>  
+					<plcf:comboEstatico id="statusOcorrencia" value="#{ocorrencia.statusOcorrencia}" dominio="StatusOcorrencia" exibeBranco="S" ajudaChave="ajuda.statusOcorrencia" showRequired="true"/> 
+				</plcf:celula> 
+
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.dataConclusao']}"/>  
+					<plcf:data id="dataConclusao" value="#{ocorrencia.dataConclusao}" ajudaChave="ajuda.dataConclusao"/> 
+				</plcf:celula> 			
+
+
+			</plcf:linha> 
+
+			<plcf:linha> 
+
+				<plcf:celula> 
+					<plcf:titulo value="#{msg['label.protocolo']}"/>  
+					<plcf:texto id="protocolo" tamanho="20" somenteLeitura="S" value="#{ocorrencia.protocolo}" ajudaChave="ajuda.protocolo"/> 
+				</plcf:celula> 				
+				<plcf:celula columnSpan="2"> 
+					<plcf:titulo value="#{msg['label.responsavelConclusao']}"/>  
+					<plcf:texto id="responsavelConclusao" tamanho="80" tamanhoMaximo="120" value="#{ocorrencia.responsavelConclusao}" ajudaChave="ajuda.responsavelConclusao"/> 
+				</plcf:celula> 	
+			</plcf:linha> 
+			<plcf:linha> 
+				<plcf:celula columnSpan="4"> 
+					<plcf:titulo value="#{msg['label.observacao']}"/>  
+					<plcf:texto id="observacao" tamanho="200" tamanhoMaximo="500" value="#{ocorrencia.observacao}" ajudaChave="ajuda.observacao"/> 
+				</plcf:celula> 				
+			</plcf:linha>
+
+		</plcf:tabela> 			
+		<plcf:tabela> 	
+			<plcf:celula>
+				<fieldset class="plc-fieldset plc-fieldset-embutido">
+					<legend class="plc-fieldset-legend">Mapa da Ocorrência</legend>					
+						<plcf:linha> 							
+							<plcf:celula columnSpan="4" inlineStyle="padding-left: 1%;">		  			
+								<f:view contentType="text/html">						
+								<p:gmap center="#{ocorrencia.latitude}, #{ocorrencia.longitude}" zoom="15" type="roadmap" 
+									style="width:1200px;height:500px"  model="#{plcAction.advancedModel}">
+          							<p:ajax event="overlaySelect" listener="#{plcAction.onMarkerSelect}" /> 
+        							<p:gmapInfoWindow id="infoWindow">
+            							<p:outputPanel style="text-align: center; display: block; margin: auto">                     
+                    						<h:outputText value="#{plcAction.marker.title}" />
+            							</p:outputPanel>
+        							</p:gmapInfoWindow>
+        						</p:gmap>
+								</f:view>									
+							</plcf:celula>								
+						</plcf:linha>					
+				</fieldset>
+			</plcf:celula>
+		</plcf:tabela> 			     
+	</ui:composition> 
+</html>
