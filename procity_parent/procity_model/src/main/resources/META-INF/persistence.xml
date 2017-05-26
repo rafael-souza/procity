@@ -32,9 +32,13 @@
 		<class>br.net.proex.entity.FotoConteudoPrefeitura</class>		
 		<class>br.net.proex.entity.TipoOcorrenciaEntity</class>	
 		<class>br.net.proex.entity.OcorrenciaEntity</class>
+		<class>br.net.proex.entity.HistoricoOcorrenciaEntity</class>
 		<class>br.net.proex.entity.FotoOcorrencia</class>
-		<class>br.net.proex.entity.FotoConteudoOcorrencia</class>
+		<class>br.net.proex.entity.FotoConteudoOcorrencia</class>			
 		
+		
+	
+		<class>br.net.proex.entity.ParametrosAplicacaoEntity</class>
 	<properties>
 			<property name="hibernate.archive.autodetection" value="class, hbm"/>
 			<!-- <property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect"/> 						

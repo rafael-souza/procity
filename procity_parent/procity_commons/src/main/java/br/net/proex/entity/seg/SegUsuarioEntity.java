@@ -37,9 +37,12 @@ import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 					"obj.senhaUsuario as senhaUsuario, " +
 					"obj.bloqueado as bloqueado, " +
 					"obj.perfil as perfil, " +
-					"obj.versao as versao " +					
+					"obj.versao as versao, " +
+					"obj2.id as pessoa_id, " +
+					"obj2.nome as pessoa_nome " +
 					"from " +
-					"SegUsuarioEntity obj " +				
+					"SegUsuarioEntity obj " +
+					" left outer join obj.pessoa obj2 " +				
 					"where " +
 					"obj.loginUsuario = :loginUsuario")				
 })

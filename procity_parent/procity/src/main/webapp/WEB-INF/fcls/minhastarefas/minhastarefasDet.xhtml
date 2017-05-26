@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:plc="http://www.powerlogic.com.br/plc" 
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:plcf="http://www.powerlogic.com.br/plcf" 
+	xmlns:tr="http://myfaces.apache.org/trinidad" 
+	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
+	<ui:composition> 
+		<fieldset class="plc-fieldset"> 
+			<legend class="plc-fieldset-legend">#{msg['minhastarefas.titulo.detalhe']}</legend>  
+			<plcf:iteracao var="historicoOcorrencia" id="historicoOcorrencia" value="#{minhastarefas.historicoOcorrencia}" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
+				<h:column> 
+					<h:outputText value="#{rowCounter.index}."/> 
+				</h:column>  
+				<h:column rendered="#{empty requestScope.visualizaDocumentoPlc}"> 
+					<f:facet name="header">
+						<plcf:tituloExclusao>Exc.</plcf:tituloExclusao>
+					</f:facet>  
+					<span class="celulaFormularioCaixaMarcacao">
+						<plcf:caixaExclusao id="indExcPlc" value="#{historicoOcorrencia.indExcPlc}"/>
+					</span> 
+				</h:column>  
+				<h:column> 
+					<f:facet name="header">
+						<plcf:titulo value="#{msg['label.id']}"/>
+					</f:facet>  
+					<plcf:oid id="id" value="#{historicoOcorrencia.id}" ajudaChave="ajuda.id"/> 
+				</h:column>  
+				<h:column> 
+					<f:facet name="header">
+						<plcf:titulo value="#{msg['label.data']}"/>
+					</f:facet>  
+					<plcf:data id="dataHistorico" value="#{historicoOcorrencia.dataHistorico}" ajudaChave="ajuda.data" showRequired="true"/> 
+				</h:column>  
+				<h:column> 
+					<f:facet name="header">
+						<plcf:titulo value="#{msg['label.observacao']}"/>
+					</f:facet>  
+					<plcf:texto id="observacao" value="#{historicoOcorrencia.observacao}" ajudaChave="ajuda.observacao" tamanho="100" showRequired="true"/> 
+				</h:column>  
+				<h:column> 
+					<f:facet name="header">
+						<plcf:titulo value="#{msg['label.responsavel']}"/>
+					</f:facet>  
+					<plcf:texto id="responsavel" value="#{historicoOcorrencia.responsavel}" ajudaChave="ajuda.responsavel" showRequired="true" tamanho="20" tamanhoMaximo="100"/> 
+				</h:column> 
+			</plcf:iteracao>
+			<script type="text/javascript">
+				applyCheckTarja("historicoOcorrencia")
+			</script> 
+		</fieldset> 
+		
+		
+		<plcf:tabela> 	
+			<plcf:celula>
+				<fieldset class="plc-fieldset plc-fieldset-embutido">
+					<legend class="plc-fieldset-legend">Mapa da Ocorrência</legend>					
+						<plcf:linha> 							
+							<plcf:celula columnSpan="4" inlineStyle="padding-left: 1%;">		  			
+								<f:view contentType="text/html">						
+								<p:gmap center="#{minhastarefas.latitude}, #{minhastarefas.longitude}" zoom="15" type="roadmap" 
+									style="width:1200px;height:500px"  model="#{plcAction.advancedModel}">
+          							<p:ajax event="overlaySelect" listener="#{plcAction.onMarkerSelect}" /> 
+        							<p:gmapInfoWindow id="infoWindow">
+            							<p:outputPanel style="text-align: center; display: block; margin: auto">                     
+                    						<h:outputText value="#{plcAction.marker.title}" />
+            							</p:outputPanel>
+        							</p:gmapInfoWindow>
+        						</p:gmap>
+								</f:view>									
+							</plcf:celula>								
+						</plcf:linha>					
+				</fieldset>
+			</plcf:celula>
+		</plcf:tabela> 			
+		
+		
+	</ui:composition> 
+</html>

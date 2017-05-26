@@ -17,27 +17,25 @@ import javax.persistence.Access;
  */
 @SPlcEntity
 @Entity
-@Table(name="tipo_ocorrencia")
-@SequenceGenerator(name="se_tipo_ocorrencia", sequenceName="se_tipo_ocorrencia")
+@Table(name="historico_ocorrencia")
+@SequenceGenerator(name="se_historico_ocorrencia", sequenceName="se_historico_ocorrencia")
 @Access(AccessType.FIELD)
 @Audited
 @NamedQueries({
-	@NamedQuery(name="TipoOcorrenciaEntity.queryMan", query="from TipoOcorrenciaEntity"),
-	@NamedQuery(name="TipoOcorrenciaEntity.querySel", query="select id as id, descricao as descricao, secretariaResponsavel as secretariaResponsavel from TipoOcorrenciaEntity order by descricao asc"),
-	@NamedQuery(name="TipoOcorrenciaEntity.querySelLookup", query="select id as id, descricao as descricao, secretariaResponsavel as secretariaResponsavel from TipoOcorrenciaEntity where id = ? order by id asc")
+	@NamedQuery(name="HistoricoOcorrenciaEntity.querySelLookup", query="select id as id, observacao as observacao from HistoricoOcorrenciaEntity where id = ? order by id asc")
 })
-public class TipoOcorrenciaEntity extends TipoOcorrencia {
+public class HistoricoOcorrenciaEntity extends HistoricoOcorrencia {
 
 	private static final long serialVersionUID = 1L;
  	
     /*
      * Construtor padrao
      */
-    public TipoOcorrenciaEntity() {
+    public HistoricoOcorrenciaEntity() {
     }
 	@Override
 	public String toString() {
-		return getDescricao();
+		return getObservacao();
 	}
 
 	@Override
@@ -48,7 +46,7 @@ public class TipoOcorrenciaEntity extends TipoOcorrencia {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TipoOcorrencia other = (TipoOcorrencia) obj;
+		HistoricoOcorrencia other = (HistoricoOcorrencia) obj;
 		if (getId() == null) {
 			if (other.getId() != null)
 				return false;

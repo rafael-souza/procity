@@ -12,9 +12,6 @@
 	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
 	<ui:composition template="/fcls/template/PlcGeralTemplate.xhtml"> 
 		<ui:define name="plc-corpo-formulario"> 
-		    <h:head>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkxuiS8j3jIGWhW3y-sKs4_ms_H09tj7s"></script> 
-    </h:head>	
 			<div id="plc-form-baco"> 
 				<div id="#{plcAliasPrefixoAction}Arg" class="plc-form-basico-topo"> 
 					<plcf:tabela tituloChave="mapaocorrenciasarg.titulo"> 										
@@ -39,6 +36,17 @@
 								<plcf:titulo value="#{msg['label.statusOcorrencia']}"/>  
 								<plcf:comboEstatico id="statusOcorrencia" value="#{mapaocorrencias.statusOcorrencia}" dominio="StatusOcorrencia" exibeBranco="S" ajudaChave="ajuda.statusOcorrencia"/> 								
 							</plcf:celula> 
+
+							<plcf:celula> 								
+									<plcf:titulo value="#{msg['label.protocolo']}"/>  
+									<plcf:texto id="protocolo" value="#{mapaocorrencias.protocolo}" tamanho="20" tamanhoMaximo="100" ajudaChave="ajuda.protocolo"/> 								
+							</plcf:celula> 	
+
+							<plcf:celula> 								
+								<plcf:titulo value="#{msg['label.endereco']}"/>  
+								<plcf:texto id="endereco" value="#{mapaocorrencias.endereco}" tamanho="60" tamanhoMaximo="100" ajudaChave="ajuda.endereco"/> 								
+							</plcf:celula> 							
+
 						</plcf:linha> 
 					</plcf:tabela> 
 					 
@@ -71,14 +79,7 @@
 								</f:facet>  
 								<plcf:exibe value="#{item.dataOcorrencia}">dataOcorrencia</plcf:exibe> 
 							</h:column>  
-							<h:column> 
-								<f:facet name="header"> 
-									<span class="plc-title af_outputLabel"> 
-										<h:outputText value="#{msg['label.dataConclusao']}"/> 
-									</span> 
-								</f:facet>  
-								<plcf:exibe value="#{item.dataConclusao}">dataConclusao</plcf:exibe> 
-							</h:column>  
+						
 							<h:column> 
 								<f:facet name="header"> 
 									<span class="plc-title af_outputLabel"> 
@@ -90,11 +91,38 @@
 							<h:column> 
 								<f:facet name="header"> 
 									<span class="plc-title af_outputLabel"> 
+										<h:outputText value="#{msg['label.protocolo']}"/> 
+									</span> 
+								</f:facet>  
+								<plcf:exibe value="#{item.protocolo}">protocolo</plcf:exibe> 
+							</h:column>  
+
+							<h:column> 
+								<f:facet name="header"> 
+									<span class="plc-title af_outputLabel"> 
 										<h:outputText value="#{msg['label.pessoa']}"/> 
 									</span> 
 								</f:facet>  
 								<plcf:exibe value="#{item.pessoa}">pessoa</plcf:exibe> 
+							</h:column>
+							<h:column> 
+								<f:facet name="header"> 
+									<span class="plc-title af_outputLabel"> 
+										<h:outputText value="#{msg['label.endereco']}"/> 
+									</span> 
+								</f:facet>  
+								<plcf:exibe value="#{item.endereco}">endereco</plcf:exibe> 
+							</h:column> 							  
+							 
+							<h:column> 
+								<f:facet name="header"> 
+									<span class="plc-title af_outputLabel"> 
+										<h:outputText value="#{msg['label.dataConclusao']}"/> 
+									</span> 
+								</f:facet>  
+								<plcf:exibe value="#{item.dataConclusao}">dataConclusao</plcf:exibe> 
 							</h:column>  
+
 							<h:column> 
 								<f:facet name="header"> 
 									<span class="plc-title af_outputLabel"> 
@@ -102,23 +130,8 @@
 									</span> 
 								</f:facet>  
 								<plcf:exibe value="#{item.responsavelConclusao}">responsavelConclusao</plcf:exibe> 
-							</h:column>  
-							<h:column> 
-								<f:facet name="header"> 
-									<span class="plc-title af_outputLabel"> 
-										<h:outputText value="#{msg['label.latitude']}"/> 
-									</span> 
-								</f:facet>  
-								<plcf:exibe value="#{item.latitude}">latitude</plcf:exibe> 
-							</h:column>  
-							<h:column> 
-								<f:facet name="header"> 
-									<span class="plc-title af_outputLabel"> 
-										<h:outputText value="#{msg['label.longitude']}"/> 
-									</span> 
-								</f:facet>  
-								<plcf:exibe value="#{item.longitude}">longitude</plcf:exibe> 
 							</h:column> 
+							
 						</plcf:iteracao> 
 					</fieldset>  
 						<script>createLineSelection('#{request.contextPath}/f/n/ocorrenciaman');</script> 
@@ -168,8 +181,12 @@
                 break;
             }
         }
+
         // Setup the statusUpdate function to hear all events on the page
         jsf.ajax.addOnEvent(aposSelecaoModal);
+
+		//plc.jq('#mapaocorrenciasSel').hide();
+        
 		//]]> </script>  
 			<div id="#{plcAliasPrefixoAction}Nav" class="plc-navegacao"> 
 				<ui:include src="/WEB-INF/fcls-plc/geralPaginacaoLogicaItens.xhtml"/> 

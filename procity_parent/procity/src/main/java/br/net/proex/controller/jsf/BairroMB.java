@@ -20,19 +20,10 @@ import com.powerlogic.jcompany.config.collaboration.PlcConfigForm.ExclusionMode;
  
 import com.powerlogic.jcompany.config.aggregation.PlcConfigAggregation;
 
-@PlcConfigAggregation(
-		entity = br.net.proex.entity.BairroEntity.class
-		
-	)
-	
-
-
+@PlcConfigAggregation(entity = br.net.proex.entity.BairroEntity.class)
 @PlcConfigForm (
-	
 	formPattern=FormPattern.Man,
 	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/bairro")
-	
-	
 )
 
 

@@ -6,6 +6,7 @@ package br.net.proex.enumeration;
 public enum StatusOcorrencia {
     
 	ABE("{statusOcorrencia.ABE}"),
+	ENC("{statusOcorrencia.ENC}"),
 	ANA("{statusOcorrencia.ANA}"),
 	CON("{statusOcorrencia.CON}");
 

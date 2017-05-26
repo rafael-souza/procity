@@ -23,9 +23,6 @@ import br.net.proex.persistence.jpa.SegUsuarioDAO;
 @PlcAggregationIoC(clazz = SegUsuarioEntity.class)
 public class SegUsuarioRepository extends PlcBaseRepository {
 	
-	/** atributo segusuariodao */
-	@Inject
-	private SegUsuarioDAO segUsuarioDAO;	
 	
 	/**
 	 * 
@@ -50,11 +47,6 @@ public class SegUsuarioRepository extends PlcBaseRepository {
 		return usuario;
 	}
 
-	/**
-	 * 
-	 * @param senha
-	 * @return
-	 */
 	/**
 	 * 
 	 * @param senha

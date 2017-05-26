@@ -1,6 +1,7 @@
 package br.net.proex.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,9 +13,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -22,12 +25,22 @@ import org.hibernate.annotations.ForeignKey;
 import org.hibernate.envers.Audited;
 
 import com.powerlogic.jcompany.config.domain.PlcFileAttach;
+import com.powerlogic.jcompany.domain.validation.PlcValDuplicity;
+import com.powerlogic.jcompany.domain.validation.PlcValMultiplicity;
 
 import br.net.proex.enumeration.StatusOcorrencia;
 
 @Audited
 @MappedSuperclass
 public abstract class Ocorrencia extends AppBaseEntity {
+
+	
+	@OneToMany (targetEntity = br.net.proex.entity.HistoricoOcorrenciaEntity.class, fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="ocorrencia")
+	@ForeignKey(name="FK_HISTORICOOCORRENCIA_OCORRENCIA")
+	@PlcValDuplicity(property="observacao")
+	@PlcValMultiplicity(referenceProperty="observacao",  message="{jcompany.aplicacao.mestredetalhe.multiplicidade.HistoricoOcorrenciaEntity}")
+	@Valid
+	private List<HistoricoOcorrenciaEntity> historicoOcorrencia;
 	
 	@Id 
  	@GeneratedValue(strategy=GenerationType.AUTO, generator = "se_ocorrencia")
@@ -68,14 +81,21 @@ public abstract class Ocorrencia extends AppBaseEntity {
 	
 	@OneToOne(targetEntity = FotoOcorrencia.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)	
 	@ForeignKey(name = "FK_OCORRENCIA_FOTO_OCORRENCIA")
-	@PlcFileAttach(extension = { "gif", "jpg", "png", "bmp" }, image = true, showImageHeight = 100, showImageWidth = 100)
+	@PlcFileAttach(extension = { "gif", "jpg", "png", "bmp" }, image = true, showImageHeight = 200, showImageWidth = 200)
 	private FotoOcorrencia fotoOcorrencia;	
+	
+	@Size(max = 300)
+	private String endereco;	
 	
 	@Size(max = 500)
 	private String observacao;
 	
 	@Size(max = 100)
-	private String protocolo;				
+	private String protocolo;	
+	
+	@Size(max = 500)
+	private String observacaoConclusao;	
+	
 
 	public Long getId() {
 		return id;
@@ -202,6 +222,42 @@ public abstract class Ocorrencia extends AppBaseEntity {
 	 */
 	public void setProtocolo(String protocolo) {
 		this.protocolo = protocolo;
+	}
+
+	public List<HistoricoOcorrenciaEntity> getHistoricoOcorrencia() {
+		return historicoOcorrencia;
+	}
+
+	public void setHistoricoOcorrencia(List<HistoricoOcorrenciaEntity> historicoOcorrencia) {
+		this.historicoOcorrencia=historicoOcorrencia;
+	}
+
+	/**
+	 * @return the endereco
+	 */
+	public String getEndereco() {
+		return endereco;
+	}
+
+	/**
+	 * @param endereco the endereco to set
+	 */
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
+	}
+
+	/**
+	 * @return the observacaoConclusao
+	 */
+	public String getObservacaoConclusao() {
+		return observacaoConclusao;
+	}
+
+	/**
+	 * @param observacaoConclusao the observacaoConclusao to set
+	 */
+	public void setObservacaoConclusao(String observacaoConclusao) {
+		this.observacaoConclusao = observacaoConclusao;
 	}
 
 }

@@ -9,9 +9,11 @@ import com.powerlogic.jcompany.commons.config.qualifiers.QPlcDefault;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcFacade;
 import com.powerlogic.jcompany.facade.PlcFacadeImpl;
 
+import br.net.proex.entity.PrefeituraEntity;
 import br.net.proex.entity.seg.SegMenuEntity;
 import br.net.proex.entity.seg.SegPerfilEntity;
 import br.net.proex.entity.seg.SegUsuarioEntity;
+import br.net.proex.persistence.jpa.PrefeituraDAO;
 import br.net.proex.persistence.jpa.SegMenuDAO;
 import br.net.proex.persistence.jpa.SegPerfilDAO;
 import br.net.proex.persistence.jpa.SegUsuarioDAO;
@@ -28,6 +30,9 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade{
 	
 	@Inject 
 	private SegMenuDAO menuDAO;
+	
+	@Inject 
+	private PrefeituraDAO prefeituraDAO;	
 	
 
 	@Override
@@ -49,6 +54,11 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade{
 	@Override
 	public SegUsuarioEntity recuperaUsuario(PlcBaseContextVO context, SegUsuarioEntity usuario) { 
 		return (SegUsuarioEntity)usuarioDAO.findById(context, SegUsuarioEntity.class, usuario.getId());
+	}
+
+	@Override
+	public PrefeituraEntity findPrefeituraById(PlcBaseContextVO context, Long id) {		
+		return (PrefeituraEntity)prefeituraDAO.findById(context, PrefeituraEntity.class, id);
 	}
 	
 }

@@ -5,9 +5,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import org.hibernate.envers.Audited;
-
 import javax.persistence.SequenceGenerator;
 import javax.persistence.AccessType;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
@@ -17,27 +14,26 @@ import javax.persistence.Access;
  */
 @SPlcEntity
 @Entity
-@Table(name="tipo_ocorrencia")
-@SequenceGenerator(name="se_tipo_ocorrencia", sequenceName="se_tipo_ocorrencia")
+@Table(name="parametros_aplicacao")
+@SequenceGenerator(name="se_parametros_aplicacao", sequenceName="se_parametros_aplicacao")
 @Access(AccessType.FIELD)
-@Audited
+
+
 @NamedQueries({
-	@NamedQuery(name="TipoOcorrenciaEntity.queryMan", query="from TipoOcorrenciaEntity"),
-	@NamedQuery(name="TipoOcorrenciaEntity.querySel", query="select id as id, descricao as descricao, secretariaResponsavel as secretariaResponsavel from TipoOcorrenciaEntity order by descricao asc"),
-	@NamedQuery(name="TipoOcorrenciaEntity.querySelLookup", query="select id as id, descricao as descricao, secretariaResponsavel as secretariaResponsavel from TipoOcorrenciaEntity where id = ? order by id asc")
+	@NamedQuery(name="ParametrosAplicacaoEntity.querySelLookup", query="select id as id, hostSmtp as hostSmtp from ParametrosAplicacaoEntity where id = ? order by id asc")
 })
-public class TipoOcorrenciaEntity extends TipoOcorrencia {
+public class ParametrosAplicacaoEntity extends ParametrosAplicacao {
 
 	private static final long serialVersionUID = 1L;
  	
     /*
      * Construtor padrao
      */
-    public TipoOcorrenciaEntity() {
+    public ParametrosAplicacaoEntity() {
     }
 	@Override
 	public String toString() {
-		return getDescricao();
+		return getHostSmtp();
 	}
 
 	@Override
@@ -48,7 +44,7 @@ public class TipoOcorrenciaEntity extends TipoOcorrencia {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TipoOcorrencia other = (TipoOcorrencia) obj;
+		ParametrosAplicacao other = (ParametrosAplicacao) obj;
 		if (getId() == null) {
 			if (other.getId() != null)
 				return false;

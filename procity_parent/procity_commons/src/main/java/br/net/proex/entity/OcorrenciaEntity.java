@@ -1,23 +1,24 @@
 package br.net.proex.entity;
 
 
-import javax.persistence.NamedQuery;
-import javax.persistence.NamedQueries;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.envers.Audited;
 
-import javax.persistence.SequenceGenerator;
-import javax.persistence.AccessType;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcEntity;
 
 import br.net.proex.enumeration.StatusOcorrencia;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import javax.persistence.Access;
+import br.net.proex.enumeration.TipoSecretario;
 /**
  * Classe Concreta gerada a partir do assistente
  */
@@ -28,14 +29,63 @@ import javax.persistence.Access;
 @Access(AccessType.FIELD)
 @Audited
 @NamedQueries({
-	@NamedQuery(name="OcorrenciaEntity.querySel2", query="select obj.id as id, obj1.id as tipoOcorrencia_id , obj1.descricao as tipoOcorrencia_descricao, obj.dataOcorrencia as dataOcorrencia, obj.dataConclusao as dataConclusao, obj.statusOcorrencia as statusOcorrencia, obj2.id as pessoa_id , obj2.nome as pessoa_nome, obj.responsavelConclusao as responsavelConclusao, obj.latitude as latitude, obj.longitude as longitude from OcorrenciaEntity obj left outer join obj.tipoOcorrencia as obj1 left outer join obj.pessoa as obj2 order by obj.responsavelConclusao asc"),
 	@NamedQuery(name="OcorrenciaEntity.queryMan", query="from OcorrenciaEntity"),
-	@NamedQuery(name="OcorrenciaEntity.querySel", query="select obj.id as id, obj1.id as pessoa_id , obj1.nome as pessoa_nome, obj2.id as tipoOcorrencia_id , obj2.descricao as tipoOcorrencia_descricao, obj.dataOcorrencia as dataOcorrencia, obj.statusOcorrencia as statusOcorrencia from OcorrenciaEntity obj left outer join obj.pessoa as obj1 left outer join obj.tipoOcorrencia as obj2 order by obj.id asc"),
+	@NamedQuery(name="OcorrenciaEntity.querySelMinhasTarefas", 
+		query="select obj.id as id, "
+			+ "obj1.id as tipoOcorrencia_id , "
+			+ "obj1.descricao as tipoOcorrencia_descricao, "
+			+ "obj1.secretariaResponsavel as tipoOcorrencia_secretariaResponsavel, "
+			+ "obj.dataOcorrencia as dataOcorrencia, "
+			+ "obj.dataConclusao as dataConclusao, "
+			+ "obj.endereco as endereco, "
+			+ "obj.protocolo as protocolo, "
+			+ "obj.statusOcorrencia as statusOcorrencia, "
+			+ "obj2.id as pessoa_id , "
+			+ "obj2.nome as pessoa_nome, "
+			+ "obj2.email as pessoa_email, "
+			+ "obj.responsavelConclusao as responsavelConclusao, "
+			+ "obj.latitude as latitude, "
+			+ "obj.longitude as longitude "
+			+ "from "
+			+ "OcorrenciaEntity obj "
+			+ "left outer join obj.tipoOcorrencia as obj1 "
+			+ "left outer join obj.pessoa as obj2 "
+			+ "where obj.statusOcorrencia <> 'ABE' "
+			+ "order by obj.id asc"),		
+	@NamedQuery(name="OcorrenciaEntity.querySel", 
+		query="select obj.id as id, "
+			+ "obj1.id as tipoOcorrencia_id , "
+			+ "obj1.descricao as tipoOcorrencia_descricao, "
+			+ "obj.dataOcorrencia as dataOcorrencia, "
+			+ "obj.dataConclusao as dataConclusao, "
+			+ "obj.endereco as endereco, "
+			+ "obj.protocolo as protocolo, "
+			+ "obj.statusOcorrencia as statusOcorrencia, "
+			+ "obj2.id as pessoa_id , "
+			+ "obj2.nome as pessoa_nome, "
+			+ "obj2.email as pessoa_email, "
+			+ "obj.responsavelConclusao as responsavelConclusao, "
+			+ "obj.latitude as latitude, "
+			+ "obj.longitude as longitude "
+			+ "from "
+			+ "OcorrenciaEntity obj "
+			+ "left outer join obj.tipoOcorrencia as obj1 "
+			+ "left outer join obj.pessoa as obj2 "
+			+ "order by obj.id asc"),
 	@NamedQuery(name="OcorrenciaEntity.querySelLookup", query="select id as id, latitude as latitude from OcorrenciaEntity where id = ? order by id asc")
 })
 public class OcorrenciaEntity extends Ocorrencia {
 
 	private static final long serialVersionUID = 1L;
+	
+	@Transient
+	private List<TipoSecretario> listaSecretaria;
+	
+	@Transient
+	private String observacaoHistorico;
+	
+	@Transient
+	private String textoDocumento;	
  	
     /*
      * Construtor padrao
@@ -63,6 +113,20 @@ public class OcorrenciaEntity extends Ocorrencia {
 	
 	
 	/**
+	 * 	
+	 * @param data
+	 * @return
+	 */
+	public String getDataConclusaoFormatada() {
+		try {
+			SimpleDateFormat dataFormatada = new SimpleDateFormat("dd/MM/yyyy");
+			return dataFormatada.format(this.getDataConclusao());
+		} catch (Exception e) {
+			return null;
+		}
+	}		
+	
+	/**
 	 * 
 	 * @param string
 	 * @return
@@ -71,7 +135,9 @@ public class OcorrenciaEntity extends Ocorrencia {
 		if (null != this.getStatusOcorrencia()){
 			switch (this.getStatusOcorrencia()) {
 			case ABE:
-				return "Em Aberto";		
+				return "Em Aberto";	
+			case ENC:
+				return "Encaminhada";					
 			case ANA:
 				return "Em Análise";					
 			case CON:
@@ -91,6 +157,8 @@ public class OcorrenciaEntity extends Ocorrencia {
 			switch (this.getStatusOcorrencia()) {
 			case ABE:
 				return "http://maps.google.com/mapfiles/ms/micons/red-dot.png";		
+			case ENC:
+				return "http://maps.google.com/mapfiles/ms/micons/blue-dot.png";					
 			case ANA:
 				return "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png";					
 			case CON:
@@ -116,5 +184,42 @@ public class OcorrenciaEntity extends Ocorrencia {
 			return false;
 		return true;
 	}
+	/**
+	 * @return the listaSecretaria
+	 */
+	public List<TipoSecretario> getListaSecretaria() {
+		return listaSecretaria;
+	}
+	/**
+	 * @param listaSecretaria the listaSecretaria to set
+	 */
+	public void setListaSecretaria(List<TipoSecretario> listaSecretaria) {
+		this.listaSecretaria = listaSecretaria;
+	}
+	/**
+	 * @return the observacaoHistorico
+	 */
+	public String getObservacaoHistorico() {
+		return observacaoHistorico;
+	}
+	/**
+	 * @param observacaoHistorico the observacaoHistorico to set
+	 */
+	public void setObservacaoHistorico(String observacaoHistorico) {
+		this.observacaoHistorico = observacaoHistorico;
+	}
+	/**
+	 * @return the textoDocumento
+	 */
+	public String getTextoDocumento() {
+		return textoDocumento;
+	}
+	/**
+	 * @param textoDocumento the textoDocumento to set
+	 */
+	public void setTextoDocumento(String textoDocumento) {
+		this.textoDocumento = textoDocumento;
+	}
+
 
 }

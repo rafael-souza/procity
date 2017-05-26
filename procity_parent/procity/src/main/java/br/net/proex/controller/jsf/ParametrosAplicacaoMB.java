@@ -11,12 +11,13 @@ import com.powerlogic.jcompany.config.collaboration.PlcConfigForm;
 import com.powerlogic.jcompany.config.collaboration.PlcConfigFormLayout;
 import com.powerlogic.jcompany.controller.jsf.annotations.PlcHandleException;
 
-import br.net.proex.entity.TipoOcorrenciaEntity;
+import br.net.proex.entity.ParametrosAplicacaoEntity;
 
-@PlcConfigAggregation(entity = br.net.proex.entity.TipoOcorrenciaEntity.class)
-@PlcConfigForm (
-	formPattern=FormPattern.Man,
-	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/tipoocorrencia")
+
+@PlcConfigAggregation(entity= br.net.proex.entity.ParametrosAplicacaoEntity.class)
+@PlcConfigForm (	
+	formPattern=FormPattern.Apl,
+	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/parametrosaplicacao")
 )
 
 
@@ -25,9 +26,9 @@ import br.net.proex.entity.TipoOcorrenciaEntity;
  */
  
 @SPlcMB
-@PlcUriIoC("tipoocorrencia")
+@PlcUriIoC("parametrosaplicacao")
 @PlcHandleException
-public class TipoOcorrenciaMB extends AppMB  {
+public class ParametrosAplicacaoMB extends AppMB  {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -36,13 +37,13 @@ public class TipoOcorrenciaMB extends AppMB  {
 	/**
 	* Entidade da ação injetado pela CDI
 	*/
-	@Produces  @Named("tipoocorrencia")
-	public TipoOcorrenciaEntity createEntityPlc() {
+	@Produces  @Named("parametrosaplicacao")
+	public ParametrosAplicacaoEntity createEntityPlc() {
         if (this.entityPlc==null) {
-              this.entityPlc = new TipoOcorrenciaEntity();
+              this.entityPlc = new ParametrosAplicacaoEntity();
               this.newEntity();
         }
-        return (TipoOcorrenciaEntity)this.entityPlc;     	
+        return (ParametrosAplicacaoEntity)this.entityPlc;     	
 	}
 		
 }

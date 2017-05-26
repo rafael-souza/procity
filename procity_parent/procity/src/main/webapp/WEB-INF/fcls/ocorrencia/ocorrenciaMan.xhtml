@@ -12,7 +12,6 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
 	<ui:composition> 
-
 		<plcf:tabela tituloChave="ocorrenciaman.titulo"> 
 			<plcf:linha> 
 				<plcf:celula> 
@@ -21,18 +20,27 @@
 				</plcf:celula>  
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.pessoa']}"/>  
-					<plc:vinculado id="pessoa" value="#{ocorrencia.pessoa}" propSelPop="pessoaEntity" idExibe="S" idSomenteLeitura="N" autoRecuperacaoClasse="br.net.proex.entity.PessoaEntity" actionSel="pessoaentitysel" modal="S" ajudaChave="ajuda.pessoa" onkeydown="selecionaPorTecla(event,this);" obrigatorio="S"/> 
+					<plcf:exibe  value="#{ocorrencia.pessoa}" rendered="#{not empty ocorrencia.id}"/> 
+					<plc:vinculado id="pessoa" value="#{ocorrencia.pessoa}" propSelPop="pessoaEntity" idExibe="S" idSomenteLeitura="N" autoRecuperacaoClasse="br.net.proex.entity.PessoaEntity" actionSel="pessoaentitysel" modal="S" ajudaChave="ajuda.pessoa" onkeydown="selecionaPorTecla(event,this);" obrigatorio="S" rendered="#{empty ocorrencia.id}"/>
 				</plcf:celula>  
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.tipoOcorrencia']}"/>  
 					<plcf:comboDinamico id="tipoOcorrencia" value="#{ocorrencia.tipoOcorrencia}" dominio="TipoOcorrenciaEntity" exibeBranco="S" ajudaChave="ajuda.tipoOcorrencia" showRequired="true"/> 
 				</plcf:celula> 
 
-				<plcf:celula rowSpan="3">									
+				<plcf:celula rowSpan="5">									
 					<plct:fileAttach property="fotoOcorrencia"  />
 				</plcf:celula>	
 
 			</plcf:linha>  
+
+			<plcf:linha> 
+				<plcf:celula columnSpan="3"> 
+					<plcf:titulo value="#{msg['label.endereco']}"/>  
+					<plcf:texto id="endereco" tamanho="115" tamanhoMaximo="300" value="#{ocorrencia.endereco}" ajudaChave="ajuda.endereco"/> 
+				</plcf:celula> 				
+			</plcf:linha>
+
 			<plcf:linha> 
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.dataOcorrencia']}"/>  
@@ -40,11 +48,11 @@
 				</plcf:celula>  
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.latitude']}"/>  
-					<plcf:texto id="latitude" value="#{ocorrencia.latitude}" ajudaChave="ajuda.latitude" showRequired="true"/> 
+					<plcf:texto id="latitude" value="#{ocorrencia.latitude}" tamanho="20" ajudaChave="ajuda.latitude" showRequired="true"/> 
 				</plcf:celula>  
 				<plcf:celula> 
 					<plcf:titulo value="#{msg['label.longitude']}"/>  
-					<plcf:texto id="longitude" value="#{ocorrencia.longitude}" ajudaChave="ajuda.longitude" showRequired="true"/> 
+					<plcf:texto id="longitude" value="#{ocorrencia.longitude}" tamanho="20"  ajudaChave="ajuda.longitude" showRequired="true"/> 
 				</plcf:celula> 
 			</plcf:linha>  
 			<plcf:linha> 
@@ -53,20 +61,21 @@
 					<plcf:comboEstatico id="statusOcorrencia" value="#{ocorrencia.statusOcorrencia}" dominio="StatusOcorrencia" exibeBranco="S" ajudaChave="ajuda.statusOcorrencia" showRequired="true"/> 
 				</plcf:celula> 
 
-				<plcf:celula> 
-					<plcf:titulo value="#{msg['label.dataConclusao']}"/>  
-					<plcf:data id="dataConclusao" value="#{ocorrencia.dataConclusao}" ajudaChave="ajuda.dataConclusao"/> 
-				</plcf:celula> 			
-
-
+				<plcf:celula columnSpan="2"> 
+					<plcf:titulo value="#{msg['label.protocolo']}"/>  
+					<plcf:texto id="protocolo" tamanho="80" somenteLeitura="S" value="#{ocorrencia.protocolo}" ajudaChave="ajuda.protocolo"/> 
+				</plcf:celula> 
+						
 			</plcf:linha> 
 
 			<plcf:linha> 
 
 				<plcf:celula> 
-					<plcf:titulo value="#{msg['label.protocolo']}"/>  
-					<plcf:texto id="protocolo" tamanho="20" somenteLeitura="S" value="#{ocorrencia.protocolo}" ajudaChave="ajuda.protocolo"/> 
+					<plcf:titulo value="#{msg['label.dataConclusao']}"/>  
+					<plcf:data id="dataConclusao" value="#{ocorrencia.dataConclusao}" ajudaChave="ajuda.dataConclusao"/> 
 				</plcf:celula> 				
+
+					
 				<plcf:celula columnSpan="2"> 
 					<plcf:titulo value="#{msg['label.responsavelConclusao']}"/>  
 					<plcf:texto id="responsavelConclusao" tamanho="80" tamanhoMaximo="120" value="#{ocorrencia.responsavelConclusao}" ajudaChave="ajuda.responsavelConclusao"/> 
@@ -75,7 +84,7 @@
 			<plcf:linha> 
 				<plcf:celula columnSpan="4"> 
 					<plcf:titulo value="#{msg['label.observacao']}"/>  
-					<plcf:texto id="observacao" tamanho="200" tamanhoMaximo="500" value="#{ocorrencia.observacao}" ajudaChave="ajuda.observacao"/> 
+					<plcf:texto id="observacao" tamanho="180" tamanhoMaximo="500" value="#{ocorrencia.observacao}" ajudaChave="ajuda.observacao"/> 
 				</plcf:celula> 				
 			</plcf:linha>
 
@@ -101,6 +110,72 @@
 						</plcf:linha>					
 				</fieldset>
 			</plcf:celula>
-		</plcf:tabela> 			     
+		</plcf:tabela> 	
+		<plcf:tabela>
+
+			<plcf:texto id="observacaoHistorico" value="#{ocorrencia.observacaoHistorico}" styleClass="esconder"/>
+
+			<plcf:botaoAcao id="botaoAcaoEncaminhar" acao="encaminhar"		styleClass="esconder"
+					partialSubmit="false"  >
+			</plcf:botaoAcao>
+
+			<div id="dialog-encaminhar" title="Encaminhar ao Responsável!">
+				<plcf:tabela styleClass="esconder">
+					<p:outputLabel value="Observação:" for="observacaoEncaminharDialog" styleClass="esconder"/>					
+					<plcf:area id="observacaoEncaminharDialog" value="#{ocorrencia.observacaoHistorico}" styleClass="esconder"
+							rows="5" colunas="100" tamanho="20" tamanhoMaximo="500"		
+							ajudaChave="ajuda.observacao"/> 
+				</plcf:tabela>
+			</div>
+		</plcf:tabela>
+		
+
+	<script type="text/javascript">//<![CDATA[
+	
+		plc.jq('.esconder').hide();
+
+		function abrirEncaminhar(){
+			plc.jq('.esconder').show();
+		    plc.jq( "#dialog-encaminhar" ).dialog({
+    			resizable: false,
+				height: "auto",
+				width: 550,
+				closeOnEscape: false,
+				open: function(event, ui) {
+					plc.jq(".ui-dialog-titlebar-close").hide();
+				},
+ 				close: function(event, ui) {
+ 					event.preventDefault(); 
+ 					plc.jq(this).dialog('destroy'); 
+ 				},
+				modal: true,
+				buttons: {
+					"Encaminhar": function() {
+			   			plc.jq('#corpo\\:formulario\\:observacaoHistorico').val(
+							plc.jq('#corpo\\:formulario\\:observacaoEncaminharDialog').val());
+			   		   	plc.jq('#corpo\\:formulario\\:botaoAcaoEncaminhar').click();			
+			   		},
+				    "Cancelar": function(event, ui) {
+				    	plc.jq('.esconder').hide();				       
+				        plc.jq( this ).dialog( "destroy" );
+				    }
+				}
+		    });
+		}    	
+
+
+		
+
+		function imprimirDocumento(data){
+			if (data.status == "success"){
+				plc.jq('#corpo\\:formulario\\:realizaImpressaoDocumento').trigger('click');	
+			}
+		}
+
+		
+	//]]> 		
+	</script>
+
+
 	</ui:composition> 
 </html>

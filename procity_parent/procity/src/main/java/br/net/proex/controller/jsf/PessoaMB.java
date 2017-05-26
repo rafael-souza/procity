@@ -13,9 +13,7 @@ import com.powerlogic.jcompany.controller.jsf.annotations.PlcHandleException;
 
 import br.net.proex.entity.PessoaEntity;
 
-@PlcConfigAggregation(
-		entity = br.net.proex.entity.PessoaEntity.class)
-	
+@PlcConfigAggregation(entity = br.net.proex.entity.PessoaEntity.class)
 @PlcConfigForm (
 	formPattern=FormPattern.Man,
 	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/pessoa")

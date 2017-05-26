@@ -22,8 +22,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.enterprise.event.Observes;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -51,6 +53,7 @@ import com.powerlogic.jcompany.controller.util.PlcURLUtil;
 
 import br.net.proex.commons.AppConstants;
 import br.net.proex.commons.AppUserProfileVO;
+import br.net.proex.entity.ParametrosAplicacaoEntity;
 import br.net.proex.entity.seg.SegPerfil;
 import br.net.proex.entity.seg.SegPerfilEntity;
 import br.net.proex.entity.seg.SegPerfilMenu;
@@ -60,10 +63,14 @@ import br.net.proex.entity.seg.SegUsuarioPerfilEntity;
 import br.net.proex.enumeration.SegAcao;
 import br.net.proex.enumeration.SegAcaoRealizada;
 import br.net.proex.enumeration.SegVisibilidadeCampo;
+import br.net.proex.facade.IAppFacade;
 
 @PlcHandleException
 @SPlcMB
 public class AppMB extends PlcBaseMB {
+	
+	@Inject  @QPlcDefault
+	protected IAppFacade facade;
 	
     @Inject @QPlcDefault
     private PlcURLUtil urlUtil;
@@ -109,12 +116,59 @@ public class AppMB extends PlcBaseMB {
 	
 	@Inject @QPlcDefault
 	private PlcCacheUtil cacheUtil;	
+	
+	protected ParametrosAplicacaoEntity parametros;
+		
+	
+	/**
+	 * Retorno ao endereço fisico da aplicação para geração de arquivos 
+	 * @return
+	 */
+	public static String getEnderecoFisicoAplicacao(){
+		// criando o endereco fisico para armazenar a imagem
+		String aplicacao = ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getContextPath();		
+		return System.getProperty("catalina.home") + "/" +"webapps" + aplicacao;
+		
+	}
+	
+	/**
+	 * Retorna o endereço logico da aplicação para referenciar arquivos
+	 * @return
+	 */
+	public static String getEnderecoLogicoAplicacao(){
+		 // criando o endereço logico para referenciar a imagem
+		String aplicacao = ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getContextPath();		
+		StringBuffer enderecoLogico = ((HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRequestURL();				
+		return enderecoLogico.substring(0, enderecoLogico.indexOf(aplicacao)) + aplicacao;		
+	}	
+	
+	
+	/**
+	 * 
+	 */	
+	public void carregaParametrosAplicacao(){
+		  // se ainda não carregou os parametros da aplicação
+        if (null == parametros){            
+			List<ParametrosAplicacaoEntity> listaParametros = (List<ParametrosAplicacaoEntity>) facade.findList(
+          		  contextMontaUtil.createContextParamMinimum(), new ParametrosAplicacaoEntity(), "", 0, 0);
+            if (null != listaParametros && listaParametros.size() > 0){
+          	  parametros = listaParametros.get(0);
+            }
+        }
+	}
+	
 		
 	/**
 	 * 
 	 * @param plcBaseMB
 	 */
 	public void handleButtonsAccordingFormPattern(@Observes @PlcHandleButtonsAccordingUseCaseAfter PlcBaseMB plcBaseMB) {
+		Map<String, Object> requestMap = contextUtil.getRequestMap();		
+		requestMap.put(PlcConstants.ACAO.EXIBE_BT_IMPRIMIR, PlcConstants.NAO_EXIBIR);
+		requestMap.put(PlcConstants.ACAO.EXIBE_BT_VISUALIZA_DOCUMENTO, PlcConstants.NAO_EXIBIR);
+		
+		
+		
 		String uriPath = urlUtil.resolveCollaborationNameFromUrl(contextUtil.getRequest());
 		HttpServletRequest request = contextUtil.getRequest();
 		SegPerfil perfil = new SegPerfilEntity();		

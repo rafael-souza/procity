@@ -65,6 +65,28 @@
 		    <version>6.1</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/javax.mail/mail -->
+		<dependency>
+		    <groupId>javax.mail</groupId>
+		    <artifactId>mail</artifactId>
+		    <version>1.4</version>
+		</dependency>		
+
+		<dependency>
+        	<groupId>jtidy</groupId>
+            <artifactId>jtidy</artifactId>
+            <version>r938</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.xhtmlrenderer</groupId>
+            <artifactId>core-renderer</artifactId>
+            <version>R8</version>
+        </dependency>    	       	
+		<dependency>
+		   <groupId>gui.ava</groupId>
+		   <artifactId>html2image</artifactId>
+		   <version>0.9</version>
+		</dependency>     
 				
 		<!-- Para auditoria rígida descomentar código abaixo -->
 		<!--  Extension de auditoria -->

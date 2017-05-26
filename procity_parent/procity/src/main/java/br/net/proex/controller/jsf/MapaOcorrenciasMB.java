@@ -3,9 +3,9 @@ package br.net.proex.controller.jsf;
 import java.util.List;
 
 import javax.enterprise.inject.Produces;
+import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.faces.bean.SessionScoped;
 
 import org.primefaces.event.map.OverlaySelectEvent;
 import org.primefaces.model.map.DefaultMapModel;
@@ -26,16 +26,13 @@ import com.powerlogic.jcompany.controller.jsf.util.PlcCreateContextUtil;
 
 import br.net.proex.entity.OcorrenciaEntity;
 import br.net.proex.entity.PrefeituraEntity;
-import br.net.proex.enumeration.StatusOcorrencia;
-import br.net.proex.facade.IAppFacade;
 
 @PlcConfigAggregation(
 		entity = br.net.proex.entity.OcorrenciaEntity.class)
 @PlcConfigForm (	
 	formPattern=FormPattern.Con,
 	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/mapaocorrencias"),
-	selection = @com.powerlogic.jcompany.config.collaboration.PlcConfigSelection(
-			apiQuerySel = "querySel2",
+	selection = @com.powerlogic.jcompany.config.collaboration.PlcConfigSelection(			
 			pagination = @com.powerlogic.jcompany.config.collaboration.PlcConfigPagination(numberByPage=50))
 )
 
@@ -58,15 +55,11 @@ public class MapaOcorrenciasMB extends AppMB  {
 	
 	private String latitude;
 	
-	private String longitude;
-	
-	@Inject  @QPlcDefault
-	private IAppFacade facade;	
-	
+	private String longitude;	
 
 	@Inject @QPlcDefault
-	protected PlcCreateContextUtil contextMontaUtil;	
-			
+	protected PlcCreateContextUtil contextMontaUtil;
+	
      		
 	/**
 	* Entidade da ação injetado pela CDI
@@ -138,7 +131,8 @@ public class MapaOcorrenciasMB extends AppMB  {
 			        //Icons and Data
 			        Marker marker = new Marker(coord, "Cód: "+ ocorrencia.getId() + " - Tipo: " + ocorrencia.getTipoOcorrencia()
 	        			+ " - Data: " + ocorrencia.getDataFormatada()
-	        			+ " - Status: " + ocorrencia.getDescricaoStatus());
+	        			+ " - Status: " + ocorrencia.getDescricaoStatus()
+	        			+ " - Endereço: " + ocorrencia.getEndereco());
 			        marker.setIcon(ocorrencia.getIconMarkerByStatus(ocorrencia.getStatusOcorrencia()));
 			        advancedModel.addOverlay(marker);			        		
 				}
@@ -146,6 +140,14 @@ public class MapaOcorrenciasMB extends AppMB  {
 		}		
 	}	
 	
+	
+	@Override
+	public String clearArgs() {
+		String retorno = super.clearArgs();
+		// limpando os marcadores do mapa
+		advancedModel = new DefaultMapModel();
+		return retorno;
+	}
 
 	public MapModel getAdvancedModel() {
         return advancedModel;
@@ -173,6 +175,6 @@ public class MapaOcorrenciasMB extends AppMB  {
 
 	public void setLongitude(String longitude) {
 		this.longitude = longitude;
-	}	
+	}
 	
 }

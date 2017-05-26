@@ -26,8 +26,7 @@ import br.net.proex.facade.IAppFacade;
 				clazz=br.net.proex.entity.Endereco.class, property="endereco", separate=false)},
 		details = {@com.powerlogic.jcompany.config.aggregation.PlcConfigDetail(
 				clazz = br.net.proex.entity.SecretariadoEntity.class, collectionName = "secretariado", numNew = 1,onDemand = false)}
-	)
-	
+)	
 @PlcConfigForm (	
 	formPattern=FormPattern.Mdt,
 	formLayout = @PlcConfigFormLayout(dirBase="/WEB-INF/fcls/prefeitura")
