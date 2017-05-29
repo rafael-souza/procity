@@ -23,7 +23,7 @@ import javax.persistence.Access;
 @Audited
 @NamedQueries({
 	@NamedQuery(name="PessoaEntity.queryMan", query="from PessoaEntity"),
-	@NamedQuery(name="PessoaEntity.querySel", query="select obj.id as id, obj.nome as nome,  obj.email as email, obj.celular as celular from PessoaEntity obj order by obj.nome asc"),
+	@NamedQuery(name="PessoaEntity.querySel", query="select obj.id as id, obj.nome as nome,  obj.email as email, obj.celular as celular, obj.senha as senha from PessoaEntity obj order by obj.nome asc"),
 	@NamedQuery(name="PessoaEntity.querySelLookup", query="select id as id, nome as nome from PessoaEntity where id = ? order by id asc")
 })
 public class PessoaEntity extends Pessoa {
