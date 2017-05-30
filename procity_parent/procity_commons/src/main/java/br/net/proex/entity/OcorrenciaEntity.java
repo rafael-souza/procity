@@ -58,6 +58,8 @@ import br.net.proex.enumeration.TipoSecretario;
 			+ "obj1.descricao as tipoOcorrencia_descricao, "
 			+ "obj.dataOcorrencia as dataOcorrencia, "
 			+ "obj.dataConclusao as dataConclusao, "
+			+ "obj.observacaoConclusao as observacaoConclusao, "
+			+ "obj.observacao as observacao, "
 			+ "obj.endereco as endereco, "
 			+ "obj.protocolo as protocolo, "
 			+ "obj.statusOcorrencia as statusOcorrencia, "
@@ -66,11 +68,13 @@ import br.net.proex.enumeration.TipoSecretario;
 			+ "obj2.email as pessoa_email, "
 			+ "obj.responsavelConclusao as responsavelConclusao, "
 			+ "obj.latitude as latitude, "
-			+ "obj.longitude as longitude "
+			+ "obj.longitude as longitude, "
+			+ "obj3.id as fotoOcorrencia_id "
 			+ "from "
 			+ "OcorrenciaEntity obj "
 			+ "left outer join obj.tipoOcorrencia as obj1 "
 			+ "left outer join obj.pessoa as obj2 "
+			+ "left outer join obj.fotoOcorrencia as obj3 "
 			+ "order by obj.id asc"),
 	@NamedQuery(name="OcorrenciaEntity.querySelLookup", query="select id as id, latitude as latitude from OcorrenciaEntity where id = ? order by id asc")
 })
@@ -86,6 +90,12 @@ public class OcorrenciaEntity extends Ocorrencia {
 	
 	@Transient
 	private String textoDocumento;	
+	
+	@Transient
+	private String descricaoTipo;
+	
+	@Transient
+	private String conteudoBinarioFoto;
  	
     /*
      * Construtor padrao
@@ -219,6 +229,30 @@ public class OcorrenciaEntity extends Ocorrencia {
 	 */
 	public void setTextoDocumento(String textoDocumento) {
 		this.textoDocumento = textoDocumento;
+	}
+	/**
+	 * @return the descricaoTipo
+	 */
+	public String getDescricaoTipo() {		
+		return descricaoTipo;
+	}
+	/**
+	 * @param descricaoTipo the descricaoTipo to set
+	 */
+	public void setDescricaoTipo(String descricaoTipo) {
+		this.descricaoTipo = descricaoTipo;
+	}
+	/**
+	 * @return the conteudoBinarioFoto
+	 */
+	public String getConteudoBinarioFoto() {
+		return conteudoBinarioFoto;
+	}
+	/**
+	 * @param conteudoBinarioFoto the conteudoBinarioFoto to set
+	 */
+	public void setConteudoBinarioFoto(String conteudoBinarioFoto) {
+		this.conteudoBinarioFoto = conteudoBinarioFoto;
 	}
 
 

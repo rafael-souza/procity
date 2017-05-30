@@ -41,7 +41,7 @@ details = {@com.powerlogic.jcompany.config.aggregation.PlcConfigDetail(
 @PlcUriIoC("ocorrencia")
 @PlcHandleException
 @SessionScoped
-public class OcorrenciaMB extends AbastractOcorrenciaMB  {
+public class OcorrenciaMB extends AbstractOcorrenciaMB  {
 
 	private static final long serialVersionUID = 1L;
 			

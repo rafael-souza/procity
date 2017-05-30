@@ -44,7 +44,7 @@ import br.net.proex.enumeration.StatusOcorrencia;
 @SPlcMB
 @PlcUriIoC("minhastarefas")
 @PlcHandleException
-public class MinhasTarefasMB extends AbastractOcorrenciaMB  {
+public class MinhasTarefasMB extends AbstractOcorrenciaMB  {
 
 	private static final long serialVersionUID = 1L;
 		     		

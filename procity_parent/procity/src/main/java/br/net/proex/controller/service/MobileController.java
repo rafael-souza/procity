@@ -1,11 +1,16 @@
 package br.net.proex.controller.service;
 
+import java.util.Base64;
+import java.util.Collection;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.QueryParam;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.PropertyUtilsBean;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.powerlogic.jcompany.commons.PlcException;
@@ -19,7 +24,10 @@ import com.powerlogic.jcompany.controller.rest.api.stereotypes.SPlcController;
 import com.powerlogic.jcompany.controller.rest.controllers.PlcBaseDynamicController;
 import com.powerlogic.jcompany.controller.util.PlcBeanPopulateUtil;
 
+import br.net.proex.entity.FotoOcorrencia;
+import br.net.proex.entity.OcorrenciaEntity;
 import br.net.proex.entity.PessoaEntity;
+import br.net.proex.facade.IAppFacade;
 
 /**
  * Atende a /rest/mobile.<caso_de_uso>
@@ -50,6 +58,9 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 
 	/** atributo token  */
 	private String token;
+	
+	@Inject @QPlcDefault
+	private IAppFacade facade;
 	
 
 	//cria instancia do propertyUtilsBean para evitar diversas chamadas a metodo syncronized
@@ -169,6 +180,12 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 				((PessoaEntity) this.getEntity()).setEmail(getUsuarioToken());							
 			}
 			
+			// quando e para buscar por ocorrencias faz o filtro por pessoas
+			if (getEntity() instanceof OcorrenciaEntity){
+				PessoaEntity pessoa = facade.findPessoaByEmail(contextMontaUtil.createContextParamMinimum(), getUsuarioToken());
+				((OcorrenciaEntity) this.getEntity()).setPessoa(pessoa);
+			}
+			
 			// recupera coleção sem paginação
 			retrieveCollectionBefore();			
 			IPlcFacade facade = getFacade();
@@ -177,8 +194,15 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 				if (getCollectionPage() != null && getCollectionPageRecords() != null) {
 					retrievePagedCollection();
 				} else {					
-					//define quantidade de linhas para retornar na busca ao BD - 0 ilimitado
-					setEntityCollection(facade.findList(getContext(), getEntity(), getCollectionOrder(), -1, 0));																												
+					
+					if (getEntity() instanceof OcorrenciaEntity){
+						//define quantidade de linhas para retornar na busca ao BD - 0 ilimitado
+						setEntityCollection(ajustarFoto(facade.findList(getContext(), getEntity(), getCollectionOrder(), -1, 0)));
+					} else {
+						//define quantidade de linhas para retornar na busca ao BD - 0 ilimitado
+						setEntityCollection(facade.findList(getContext(), getEntity(), getCollectionOrder(), -1, 0));																												
+					}
+					
 				}
 			} catch (Exception e) {
 				handleExceptions(e);
@@ -189,6 +213,34 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 		} catch (Exception e) {
 			throw new PlcException("MobileController", "retrieveCollection", e, null, "");
 		}
+	}
+
+	private Collection<E> ajustarFoto(Collection listaOcorrencias) {
+		List<OcorrenciaEntity> lista = (List<OcorrenciaEntity>) listaOcorrencias;
+		// verificando se a lista possui algum registro
+		if (null != lista && lista.size() > 0){
+			// percorrendo a lista para ajustar as atividades
+			for (OcorrenciaEntity ocorrencia : lista){
+				if (null != ocorrencia.getFotoOcorrencia() && null != ocorrencia.getFotoOcorrencia().getId()){
+					ocorrencia.setFotoOcorrencia((FotoOcorrencia) facade.downloadFile(contextMontaUtil.createContextParamMinimum(),
+							FotoOcorrencia.class, ocorrencia.getFotoOcorrencia().getId()));
+										
+					
+					StringBuilder sb = new StringBuilder();
+					sb.append("data:image/png;base64,");
+					sb.append(Base64.getEncoder().encodeToString(ocorrencia.getFotoOcorrencia().getBinaryContent().getBinaryContent()));
+					ocorrencia.setConteudoBinarioFoto(sb.toString());
+										
+				}
+				
+				if (null != ocorrencia.getTipoOcorrencia() && null != ocorrencia.getTipoOcorrencia().getDescricao()){
+					ocorrencia.setDescricaoTipo(ocorrencia.getTipoOcorrencia().getDescricao());
+				}
+
+			}
+		}
+				
+		return (Collection<E>)lista;
 	}
 
 	/**

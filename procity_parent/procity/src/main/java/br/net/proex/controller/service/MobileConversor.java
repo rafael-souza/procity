@@ -85,7 +85,7 @@ public class MobileConversor<C> extends MobileJsonConversor<C> {
 		if (this.getUcName().equals("pessoa")) {
 			propriedades = "id,nome,email,senha".split(",");
 		} else if (this.getUcName().equals("ocorrencia")) {
-			propriedades = "id,pessoa,tipoOcorrencia,dataOcorrencia,dataConclusao,latitude,longitude,statusOcorrencia,fotoOcorrencia,observacao,protocolo,observacaoConclusao".split(",");
+			propriedades = "id,pessoa,tipoOcorrencia,tipoOcorrencia.id,tipoOcorrencia.descricao,conteudoBinarioFoto,descricaoTipo,endereco,dataOcorrencia,dataConclusao,latitude,longitude,statusOcorrencia,fotoOcorrencia,observacao,protocolo,observacaoConclusao".split(",");
 		} 
 		
 		return propriedades;

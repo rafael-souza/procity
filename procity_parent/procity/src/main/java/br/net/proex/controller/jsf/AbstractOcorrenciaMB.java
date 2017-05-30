@@ -32,7 +32,7 @@ import br.net.proex.utils.SendEmailUtils;
 
 @PlcHandleException
 @SPlcMB
-public class AbastractOcorrenciaMB extends AppMB{
+public class AbstractOcorrenciaMB extends AppMB{
 
 	private MapModel advancedModel;
 	
