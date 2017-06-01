@@ -22,7 +22,10 @@ import javax.persistence.Access;
 @Access(AccessType.FIELD)
 @Audited
 @NamedQueries({
-	@NamedQuery(name="PessoaEntity.queryMan", query="from PessoaEntity"),
+	@NamedQuery(name="PessoaEntity.naoDeveExistir", query="select count(*) " +
+            "from PessoaEntity obj " +
+            "where obj.email = :email "),		
+	@NamedQuery(name="PessoaEntity.queryMan", query="from PessoaEntity"),	
 	@NamedQuery(name="PessoaEntity.querySelEmail", query="Select obj from PessoaEntity obj where obj.email like :email "),
 	@NamedQuery(name="PessoaEntity.querySel", query="select obj.id as id, obj.nome as nome,  obj.email as email, obj.celular as celular, obj.senha as senha from PessoaEntity obj order by obj.nome asc"),
 	@NamedQuery(name="PessoaEntity.querySelLookup", query="select id as id, nome as nome from PessoaEntity where id = ? order by id asc")

@@ -2,6 +2,7 @@ package br.net.proex.controller.service;
 
 import java.util.Base64;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,7 +11,6 @@ import javax.ws.rs.QueryParam;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.PropertyUtilsBean;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.powerlogic.jcompany.commons.PlcException;
@@ -24,6 +24,7 @@ import com.powerlogic.jcompany.controller.rest.api.stereotypes.SPlcController;
 import com.powerlogic.jcompany.controller.rest.controllers.PlcBaseDynamicController;
 import com.powerlogic.jcompany.controller.util.PlcBeanPopulateUtil;
 
+import br.net.proex.entity.FotoConteudoOcorrencia;
 import br.net.proex.entity.FotoOcorrencia;
 import br.net.proex.entity.OcorrenciaEntity;
 import br.net.proex.entity.PessoaEntity;
@@ -121,42 +122,31 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 	 */
 	@Override
 	protected void insertBefore() {				
-//		// verificando se está inserindo uma lista de dados
-//		if (getEntityCollection() != null && !getEntityCollection().isEmpty()) {
-//			// percorrendo a lista para ajustar as fotos
-//			for (E obj : getEntityCollection()){
-//				// verificando se o obj é uma instancia de inscrição imobiliaria
-//				if (obj instanceof MobInscricaoImobiliariaEntity){
-//					MobInscricaoImobiliariaEntity inscricaoImobiliaria = (MobInscricaoImobiliariaEntity) obj;
-//					// ajustando a foto fachada
-//					ajustaFotoFachada(inscricaoImobiliaria);
-//					// ajusta Foto adicional 1
-//					ajustaFotoAdicional1(inscricaoImobiliaria);
-//					// ajusta Foto adicional 2
-//					ajustaFotoAdicional2(inscricaoImobiliaria);									
-//				}										
-//			}
-//		// verificando se esta inserindo apenas um objeto 	
-//		}  else if (getEntity() instanceof MobInscricaoImobiliariaEntity) {
-//			MobInscricaoImobiliariaEntity inscricaoImobiliaria = (MobInscricaoImobiliariaEntity) getEntity();			
-//			// ajustando a foto fachada
-//			ajustaFotoFachada(inscricaoImobiliaria);
-//			// ajusta Foto adicional 1
-//			ajustaFotoAdicional1(inscricaoImobiliaria);
-//			// ajusta Foto adicional 2
-//			ajustaFotoAdicional2(inscricaoImobiliaria);
-//																
-//		}
-	}
-	
-	
-	
-	/**
-	 * 
-	 */
-	@Override
-	protected void insertAfter() {		
-		log.info(">>>>>>>>>>>>>>> Vai atualizar os produtos com estoque 0");		
+		if (getEntity() instanceof OcorrenciaEntity) {
+			OcorrenciaEntity ocorrencia = (OcorrenciaEntity) getEntity();			
+			// verificando se as fotos foram tiradas
+			if(null != ocorrencia.getFotoApp()){
+				try {
+					String base64Image = ocorrencia.getFotoApp().replace(" ", "+").split(",")[1];
+					byte[] fotoFachada = Base64.getDecoder().decode(base64Image.getBytes());
+					//byte[] fotoFachada = Base64.decode(base64Image);														
+					// criand o objeto de conteudo
+					FotoConteudoOcorrencia fotoConteudo = new FotoConteudoOcorrencia();
+					fotoConteudo.setBinaryContent(fotoFachada);
+					// criando o objeto da foto
+					FotoOcorrencia foto = new FotoOcorrencia();							
+					foto.setBinaryContent(fotoConteudo);
+					foto.setNome("");
+					foto.setType("image/jpg");	
+					foto.setDataUltAlteracao(new Date());
+					foto.setLength(fotoConteudo.getBinaryContent().length);					
+					
+					ocorrencia.setFotoOcorrencia(foto);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}	
+		}
 	}
 	
 	/**
@@ -224,8 +214,7 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 				if (null != ocorrencia.getFotoOcorrencia() && null != ocorrencia.getFotoOcorrencia().getId()){
 					ocorrencia.setFotoOcorrencia((FotoOcorrencia) facade.downloadFile(contextMontaUtil.createContextParamMinimum(),
 							FotoOcorrencia.class, ocorrencia.getFotoOcorrencia().getId()));
-										
-					
+															
 					StringBuilder sb = new StringBuilder();
 					sb.append("data:image/png;base64,");
 					sb.append(Base64.getEncoder().encodeToString(ocorrencia.getFotoOcorrencia().getBinaryContent().getBinaryContent()));

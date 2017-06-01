@@ -96,6 +96,9 @@ public class OcorrenciaEntity extends Ocorrencia {
 	
 	@Transient
 	private String conteudoBinarioFoto;
+	
+	@Transient
+	private String fotoApp;	
  	
     /*
      * Construtor padrao
@@ -253,6 +256,18 @@ public class OcorrenciaEntity extends Ocorrencia {
 	 */
 	public void setConteudoBinarioFoto(String conteudoBinarioFoto) {
 		this.conteudoBinarioFoto = conteudoBinarioFoto;
+	}
+	/**
+	 * @return the fotoApp
+	 */
+	public String getFotoApp() {
+		return fotoApp;
+	}
+	/**
+	 * @param fotoApp the fotoApp to set
+	 */
+	public void setFotoApp(String fotoApp) {
+		this.fotoApp = fotoApp;
 	}
 
 

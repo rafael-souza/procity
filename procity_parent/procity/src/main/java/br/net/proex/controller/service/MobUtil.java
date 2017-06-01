@@ -81,10 +81,7 @@ public class MobUtil implements Serializable {
 			// buscando a pessoa no banco para retorno/validação
 			PessoaEntity pessoa = new PessoaEntity();
 			pessoa.setEmail(email);
-			List<PessoaEntity> lista = (List<PessoaEntity>)facade.findList(contextMontaUtil.createContextParamMinimum(), pessoa, "", 0, 0);
-			if (null != lista && lista.size() > 0){
-				pessoa = lista.get(0);
-			}
+			pessoa = facade.findPessoaByEmail(contextMontaUtil.createContextParamMinimum(), email);
 			
 			// verificando se o token informado é um token válido
 			return (null != pessoa && token.equals(getToken(pessoa)));
