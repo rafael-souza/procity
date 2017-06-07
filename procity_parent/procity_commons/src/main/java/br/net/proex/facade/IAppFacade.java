@@ -5,6 +5,7 @@ import java.util.List;
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.facade.IPlcFacade;
 
+import br.net.proex.entity.OcorrenciaEntity;
 import br.net.proex.entity.PessoaEntity;
 import br.net.proex.entity.PrefeituraEntity;
 import br.net.proex.entity.seg.SegMenuEntity;
@@ -21,8 +22,12 @@ public interface IAppFacade extends IPlcFacade{
 	
 	SegUsuarioEntity recuperaUsuario(PlcBaseContextVO context, SegUsuarioEntity usuario);
 
-	PrefeituraEntity findPrefeituraById(PlcBaseContextVO createContextParamMinimum, Long id);
+	PrefeituraEntity findPrefeituraById(PlcBaseContextVO context, Long id);
 
 	PessoaEntity findPessoaByEmail(PlcBaseContextVO context, String email);
+
+	List<OcorrenciaEntity> findOcorrenciaPorPessoa(PlcBaseContextVO context, Long id);
+
+	OcorrenciaEntity findOcorrenciaById(PlcBaseContextVO context, Long id);
 	
 }

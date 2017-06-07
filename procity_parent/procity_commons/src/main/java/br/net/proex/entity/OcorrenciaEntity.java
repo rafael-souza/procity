@@ -76,6 +76,16 @@ import br.net.proex.enumeration.TipoSecretario;
 			+ "left outer join obj.pessoa as obj2 "
 			+ "left outer join obj.fotoOcorrencia as obj3 "
 			+ "order by obj.id asc"),
+	@NamedQuery(name="OcorrenciaEntity.querySelPorPessoa", 
+		query="select obj "			
+			+ "from "
+			+ "OcorrenciaEntity obj "
+			+ "left outer join obj.tipoOcorrencia as obj1 "
+			+ "left outer join obj.pessoa as obj2 "
+			+ "left outer join obj.fotoOcorrencia as obj3 "
+			+ "where "
+			+ "obj2.id =:idPessoa "
+			+ "order by obj.id asc"),	
 	@NamedQuery(name="OcorrenciaEntity.querySelLookup", query="select id as id, latitude as latitude from OcorrenciaEntity where id = ? order by id asc")
 })
 public class OcorrenciaEntity extends Ocorrencia {

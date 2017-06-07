@@ -1,5 +1,8 @@
 package br.net.proex.controller.service;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
@@ -28,6 +31,7 @@ import br.net.proex.entity.FotoConteudoOcorrencia;
 import br.net.proex.entity.FotoOcorrencia;
 import br.net.proex.entity.OcorrenciaEntity;
 import br.net.proex.entity.PessoaEntity;
+import br.net.proex.enumeration.StatusOcorrencia;
 import br.net.proex.facade.IAppFacade;
 
 /**
@@ -121,9 +125,12 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 	 * 
 	 */
 	@Override
-	protected void insertBefore() {				
+	protected void insertBefore() {
 		if (getEntity() instanceof OcorrenciaEntity) {
-			OcorrenciaEntity ocorrencia = (OcorrenciaEntity) getEntity();			
+			OcorrenciaEntity ocorrencia = (OcorrenciaEntity) getEntity();
+			ocorrencia.setDataOcorrencia(new Date());
+			ocorrencia.setStatusOcorrencia(StatusOcorrencia.ABE);
+			ocorrencia.setPessoa(facade.findPessoaByEmail(contextMontaUtil.createContextParamMinimum(), ocorrencia.getPessoa().getEmail()));
 			// verificando se as fotos foram tiradas
 			if(null != ocorrencia.getFotoApp()){
 				try {
@@ -136,7 +143,7 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 					// criando o objeto da foto
 					FotoOcorrencia foto = new FotoOcorrencia();							
 					foto.setBinaryContent(fotoConteudo);
-					foto.setNome("");
+					foto.setNome(gerarMD(ocorrencia.getDataOcorrencia().toString()));
 					foto.setType("image/jpg");	
 					foto.setDataUltAlteracao(new Date());
 					foto.setLength(fotoConteudo.getBinaryContent().length);					
@@ -166,8 +173,9 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 			
 			// verificando se é para buscar os usuários
 			if (getEntity() instanceof PessoaEntity){
+				PessoaEntity pessoa = facade.findPessoaByEmail(contextMontaUtil.createContextParamMinimum(), getUsuarioToken());
 				// setando o usuario que está sincronizado os dados
-				((PessoaEntity) this.getEntity()).setEmail(getUsuarioToken());							
+				this.setEntity((E) pessoa);							
 			}
 			
 			// quando e para buscar por ocorrencias faz o filtro por pessoas
@@ -177,8 +185,7 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 			}
 			
 			// recupera coleção sem paginação
-			retrieveCollectionBefore();			
-			IPlcFacade facade = getFacade();
+			retrieveCollectionBefore();						
 						
 			try {
 				if (getCollectionPage() != null && getCollectionPageRecords() != null) {
@@ -187,12 +194,11 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 					
 					if (getEntity() instanceof OcorrenciaEntity){
 						//define quantidade de linhas para retornar na busca ao BD - 0 ilimitado
-						setEntityCollection(ajustarFoto(facade.findList(getContext(), getEntity(), getCollectionOrder(), -1, 0)));
+						setEntityCollection(ajustarFoto(facade.findOcorrenciaPorPessoa(contextMontaUtil.createContextParamMinimum(), ((OcorrenciaEntity)getEntity()).getPessoa().getId())));
 					} else {
-						//define quantidade de linhas para retornar na busca ao BD - 0 ilimitado
-						setEntityCollection(facade.findList(getContext(), getEntity(), getCollectionOrder(), -1, 0));																												
+						setEntityCollection(facade.findList(getContext(), getEntity(), getCollectionOrder(), -1, 0));
 					}
-					
+					 
 				}
 			} catch (Exception e) {
 				handleExceptions(e);
@@ -207,10 +213,13 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 
 	private Collection<E> ajustarFoto(Collection listaOcorrencias) {
 		List<OcorrenciaEntity> lista = (List<OcorrenciaEntity>) listaOcorrencias;
+		List<OcorrenciaEntity> listaRetorno = new ArrayList<OcorrenciaEntity>();
 		// verificando se a lista possui algum registro
-		if (null != lista && lista.size() > 0){
+		if (null != lista && lista.size() > 0){		
 			// percorrendo a lista para ajustar as atividades
 			for (OcorrenciaEntity ocorrencia : lista){
+								
+				ocorrencia = facade.findOcorrenciaById(contextMontaUtil.createContextParamMinimum(), ocorrencia.getId());
 				if (null != ocorrencia.getFotoOcorrencia() && null != ocorrencia.getFotoOcorrencia().getId()){
 					ocorrencia.setFotoOcorrencia((FotoOcorrencia) facade.downloadFile(contextMontaUtil.createContextParamMinimum(),
 							FotoOcorrencia.class, ocorrencia.getFotoOcorrencia().getId()));
@@ -225,11 +234,13 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 				if (null != ocorrencia.getTipoOcorrencia() && null != ocorrencia.getTipoOcorrencia().getDescricao()){
 					ocorrencia.setDescricaoTipo(ocorrencia.getTipoOcorrencia().getDescricao());
 				}
+				
+				listaRetorno.add(ocorrencia);
 
 			}
 		}
 				
-		return (Collection<E>)lista;
+		return (Collection<E>)listaRetorno;
 	}
 
 	/**
@@ -246,6 +257,24 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 	 */
 	public String getToken() {
 		return token;
+	}
+	
+	
+	public String gerarMD(String md5) {
+		MessageDigest md;
+		StringBuffer sb = null;
+		try {
+			md = MessageDigest.getInstance("MD5");
+			byte[] array = md.digest(md5.getBytes());
+			sb = new StringBuffer();
+			for (int i = 0; i < array.length; ++i) {
+				sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
+			}
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return sb.toString();
+
 	}
 	
 

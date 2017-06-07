@@ -16,6 +16,7 @@ import com.powerlogic.jcompany.controller.rest.api.stereotypes.SPlcConversor;
 import com.powerlogic.jcompany.controller.rest.conversors.IPlcRestRendererUtil;
 
 import br.net.proex.commons.AppBeanMessages;
+import br.net.proex.controller.exception.AppLoginNegadoException;
 
 @SPlcConversor
 @QPlcControllerName("mobile")
@@ -108,8 +109,8 @@ public class MobileConversor<C> extends MobileJsonConversor<C> {
 			return true;
 		}
 		
-		if (!util.validaToken(container.getToken())) {
-			throw new PlcException("Token Inválido");
+		if (!util.validaToken(container.getToken())) {			
+			throw new PlcException("Usuário e/ou senha incorretos");
 		}
 		
 		return true;

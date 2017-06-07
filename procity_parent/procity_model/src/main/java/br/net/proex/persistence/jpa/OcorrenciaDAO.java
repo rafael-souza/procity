@@ -1,7 +1,11 @@
 package br.net.proex.persistence.jpa;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.annotation.PlcAggregationDAOIoC;
@@ -14,6 +18,7 @@ import com.powerlogic.jcompany.persistence.jpa.PlcQueryParameter;
 import com.powerlogic.jcompany.persistence.jpa.PlcQueryService;
 
 import br.net.proex.entity.OcorrenciaEntity;
+import br.net.proex.entity.PessoaEntity;
 import br.net.proex.entity.TipoOcorrenciaEntity;
 import br.net.proex.enumeration.StatusOcorrencia;
 import br.net.proex.enumeration.TipoSecretario;
@@ -86,6 +91,23 @@ public class OcorrenciaDAO extends AppJpaDAO  {
 			@PlcQueryParameter(name="statusOcorrencia", expression="obj.statusOcorrencia = :statusOcorrencia") StatusOcorrencia statusOcorrencia,
 			@PlcQueryParameter(name="protocolo", expression="obj.protocolo like :protocolo || '%' ") String protocolo
 	);
+
+	/**
+	 * 
+	 * @param context
+	 * @param idPessoa
+	 * @return
+	 */
+	public List<OcorrenciaEntity> findOcorrenciaPorPessoa(PlcBaseContextVO context, Long idPessoa) {
+		try { 
+			EntityManager em = this.getEntityManager(context); 			
+			Query query = em.createNamedQuery("OcorrenciaEntity.querySelPorPessoa");
+			query.setParameter("idPessoa", idPessoa);
+			return (List<OcorrenciaEntity>)query.getResultList();			
+		} catch (Exception e) {
+			return null;
+		}
+	}
 		
 	
 }

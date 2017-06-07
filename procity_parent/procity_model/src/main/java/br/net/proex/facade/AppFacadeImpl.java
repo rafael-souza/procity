@@ -1,5 +1,6 @@
 package br.net.proex.facade;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -9,11 +10,13 @@ import com.powerlogic.jcompany.commons.config.qualifiers.QPlcDefault;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcFacade;
 import com.powerlogic.jcompany.facade.PlcFacadeImpl;
 
+import br.net.proex.entity.OcorrenciaEntity;
 import br.net.proex.entity.PessoaEntity;
 import br.net.proex.entity.PrefeituraEntity;
 import br.net.proex.entity.seg.SegMenuEntity;
 import br.net.proex.entity.seg.SegPerfilEntity;
 import br.net.proex.entity.seg.SegUsuarioEntity;
+import br.net.proex.persistence.jpa.OcorrenciaDAO;
 import br.net.proex.persistence.jpa.PessoaDAO;
 import br.net.proex.persistence.jpa.PrefeituraDAO;
 import br.net.proex.persistence.jpa.SegMenuDAO;
@@ -36,7 +39,12 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade{
 	@Inject 
 	private PrefeituraDAO prefeituraDAO;	
 	
-	@Inject PessoaDAO pessoaDAO;
+	@Inject 
+	private PessoaDAO pessoaDAO;
+	
+	@Inject 
+	private OcorrenciaDAO ocorrenciaDAO;
+	
 	
 
 	@Override
@@ -68,6 +76,19 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade{
 	@Override
 	public PessoaEntity findPessoaByEmail(PlcBaseContextVO context, String email) {
 		return pessoaDAO.findPessoaByEmail(context, email);
+	}
+
+	@Override
+	public List<OcorrenciaEntity> findOcorrenciaPorPessoa(PlcBaseContextVO context, Long idPessoa) {
+		return ocorrenciaDAO.findOcorrenciaPorPessoa(context,idPessoa);
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public OcorrenciaEntity findOcorrenciaById(PlcBaseContextVO context, Long id) {
+		return (OcorrenciaEntity)ocorrenciaDAO.findById(context, OcorrenciaEntity.class, id);
 	}
 	
 }
