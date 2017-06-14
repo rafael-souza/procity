@@ -1,17 +1,12 @@
 package br.net.proex.controller.jsf;
 
+import java.util.Base64;
 import java.util.List;
 
 import javax.enterprise.inject.Produces;
 import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.primefaces.event.map.OverlaySelectEvent;
-import org.primefaces.model.map.DefaultMapModel;
-import org.primefaces.model.map.LatLng;
-import org.primefaces.model.map.MapModel;
-import org.primefaces.model.map.Marker;
 
 import com.powerlogic.jcompany.commons.annotation.PlcUriIoC;
 import com.powerlogic.jcompany.commons.config.qualifiers.QPlcDefault;
@@ -24,6 +19,7 @@ import com.powerlogic.jcompany.controller.jsf.PlcEntityList;
 import com.powerlogic.jcompany.controller.jsf.annotations.PlcHandleException;
 import com.powerlogic.jcompany.controller.jsf.util.PlcCreateContextUtil;
 
+import br.net.proex.entity.FotoOcorrencia;
 import br.net.proex.entity.OcorrenciaEntity;
 import br.net.proex.entity.PrefeituraEntity;
 
@@ -48,14 +44,12 @@ import br.net.proex.entity.PrefeituraEntity;
 public class MapaOcorrenciasMB extends AppMB  {
 
 	private static final long serialVersionUID = 1L;
-
-	private MapModel advancedModel;
-	
-	private Marker marker;
 	
 	private String latitude;
 	
 	private String longitude;	
+	
+	private Boolean listagemOcorrencia;
 
 	@Inject @QPlcDefault
 	protected PlcCreateContextUtil contextMontaUtil;
@@ -119,22 +113,20 @@ public class MapaOcorrenciasMB extends AppMB  {
 			List<OcorrenciaEntity> listaOcorrencia = (List<OcorrenciaEntity>)(Object) this.entityListPlc.getItensPlc();
 			// verificando se tem algum resultado
 			if (null != listaOcorrencia && listaOcorrencia.size() > 0){
-				// ajustando o marcador no mapa
-				advancedModel = new DefaultMapModel();
-				
+						
 				// percorre a lista para a montagem da lista dos pontos do mapa
 				for (OcorrenciaEntity ocorrencia : listaOcorrencia){
-					   //Shared coordinates
-			        LatLng coord = new LatLng(Double.parseDouble(ocorrencia.getLatitude()), 
-			        		Double.parseDouble(ocorrencia.getLongitude()));
-			          
-			        //Icons and Data
-			        Marker marker = new Marker(coord, "Cód: "+ ocorrencia.getId() + " - Tipo: " + ocorrencia.getTipoOcorrencia()
-	        			+ " - Data: " + ocorrencia.getDataFormatada()
-	        			+ " - Status: " + ocorrencia.getDescricaoStatus()
-	        			+ " - Endereço: " + ocorrencia.getEndereco());
-			        marker.setIcon(ocorrencia.getIconMarkerByStatus(ocorrencia.getStatusOcorrencia()));
-			        advancedModel.addOverlay(marker);			        		
+			        
+					if (null != ocorrencia.getFotoOcorrencia() && null != ocorrencia.getFotoOcorrencia().getId()){
+						ocorrencia.setFotoOcorrencia((FotoOcorrencia) facade.downloadFile(contextMontaUtil.createContextParamMinimum(),
+								FotoOcorrencia.class, ocorrencia.getFotoOcorrencia().getId()));
+																
+						StringBuilder sb = new StringBuilder();
+						sb.append("data:image/png;base64,");
+						sb.append(Base64.getEncoder().encodeToString(ocorrencia.getFotoOcorrencia().getBinaryContent().getBinaryContent()));
+						ocorrencia.setConteudoBinarioFoto(sb.toString());											
+					} 
+			        
 				}
 			}
 		}		
@@ -144,22 +136,9 @@ public class MapaOcorrenciasMB extends AppMB  {
 	@Override
 	public String clearArgs() {
 		String retorno = super.clearArgs();
-		// limpando os marcadores do mapa
-		advancedModel = new DefaultMapModel();
+		
 		return retorno;
 	}
-
-	public MapModel getAdvancedModel() {
-        return advancedModel;
-    }
-      
-    public void onMarkerSelect(OverlaySelectEvent event) {
-        marker = (Marker) event.getOverlay();
-    }
-      
-    public Marker getMarker() {
-        return marker;
-    }
 
 	public String getLatitude() {
 		return latitude;
@@ -175,6 +154,20 @@ public class MapaOcorrenciasMB extends AppMB  {
 
 	public void setLongitude(String longitude) {
 		this.longitude = longitude;
+	}
+
+	/**
+	 * @return the listagemOcorrencia
+	 */
+	public Boolean getListagemOcorrencia() {
+		return listagemOcorrencia;
+	}
+
+	/**
+	 * @param listagemOcorrencia the listagemOcorrencia to set
+	 */
+	public void setListagemOcorrencia(Boolean listagemOcorrencia) {
+		this.listagemOcorrencia = listagemOcorrencia;
 	}
 	
 }

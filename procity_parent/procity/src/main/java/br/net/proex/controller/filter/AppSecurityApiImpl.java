@@ -13,8 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.powerlogic.jcompany.commons.PlcBaseUserProfileDTO;
 import com.powerlogic.jcompany.commons.config.qualifiers.QPlcDefault;
+import com.powerlogic.jcompany.commons.config.qualifiers.QPlcDefaultLiteral;
 import com.powerlogic.jcompany.commons.integration.IPlcJSecurityApi;
 import com.powerlogic.jcompany.commons.integration.impl.PlcJSecurityApiImpl;
+import com.powerlogic.jcompany.commons.util.PlcIocFacadeUtil;
+import com.powerlogic.jcompany.commons.util.cdi.PlcCDIUtil;
 import com.powerlogic.jcompany.controller.jsf.util.PlcCreateContextUtil;
 
 import br.net.proex.commons.AppUserProfileVO;
@@ -23,6 +26,7 @@ import br.net.proex.entity.seg.SegPerfilEntity;
 import br.net.proex.entity.seg.SegPerfilMenu;
 import br.net.proex.entity.seg.SegUsuarioPerfilEntity;
 import br.net.proex.enumeration.SegTipoAcesso;
+import br.net.proex.facade.IAppFacade;
 
 @Specializes
 public class AppSecurityApiImpl extends PlcJSecurityApiImpl implements IPlcJSecurityApi{
@@ -33,6 +37,32 @@ public class AppSecurityApiImpl extends PlcJSecurityApiImpl implements IPlcJSecu
 	@Inject @QPlcDefault
 	protected PlcCreateContextUtil contextMontaUtil;
 	
+	
+	
+	@Override
+	public PlcBaseUserProfileDTO carregaProfileJSecurity(
+			HttpServletRequest request, HttpServletResponse response,
+			PlcBaseUserProfileDTO usuario) {
+	
+		Map<String, Object> recursos = new HashMap<String, Object>();
+		
+		SegPerfilEntity perfil = new SegPerfilEntity();
+		
+		for (SegUsuarioPerfilEntity usuarioPerfil : userProfileVO.getUsuario().getUsuarioPerfil()){
+			perfil = usuarioPerfil.getPerfil();	
+			for (SegPerfilMenu menu : perfil.getPerfilMenu()) {	
+				String urlUser = menu.getMenu().getUrl();	
+				if (menu.getTipoAcesso() == null ? false : !menu.getTipoAcesso().equals(SegTipoAcesso.NEG)){
+					recursos.put( urlUser.startsWith("/f/n/") ? urlUser : "/f/n/" + urlUser , true);
+				}										
+			}
+		}
+							
+		usuario.setResources(recursos);		
+		return super.carregaProfileJSecurity(request, response, usuario);
+	}	
+	
+		
 	/**
 	 * 	
 	 */

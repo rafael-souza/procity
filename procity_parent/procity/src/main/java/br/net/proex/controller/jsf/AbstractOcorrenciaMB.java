@@ -34,9 +34,6 @@ import br.net.proex.utils.SendEmailUtils;
 @SPlcMB
 public class AbstractOcorrenciaMB extends AppMB{
 
-	private MapModel advancedModel;
-	
-	private Marker marker;
 	
 	@Inject @QPlcDefault
 	protected GeraPdfUtil geraPdfUtil;	
@@ -58,29 +55,6 @@ public class AbstractOcorrenciaMB extends AppMB{
 		return historico;
 		
 	}
-	
-	
-	/**
-	 * 
-	 * @param ocorrencia
-	 */
-	public void ajustaMarcadorMapa(OcorrenciaEntity ocorrencia) {
-		// ajustando o marcador no mapa
-		advancedModel = new DefaultMapModel();
-        
-        //Shared coordinates
-        LatLng coord = new LatLng(Double.parseDouble(ocorrencia.getLatitude()), 
-        		Double.parseDouble(ocorrencia.getLongitude()));
-          
-        //Icons and Data
-        Marker marker = new Marker(coord, "Cód: "+ ocorrencia.getId() + " - Tipo: " + ocorrencia.getTipoOcorrencia()
-			+ " - Data: " + ocorrencia.getDataFormatada()
-			+ " - Status: " + ocorrencia.getDescricaoStatus()
-			+ " - Endereço: " + ocorrencia.getEndereco());
-        marker.setIcon(ocorrencia.getIconMarkerByStatus(ocorrencia.getStatusOcorrencia()));
-        advancedModel.addOverlay(marker);	
-		
-	}	
 	
 	
 	/**
@@ -355,20 +329,6 @@ public class AbstractOcorrenciaMB extends AppMB{
 			return null;
 		}  		
 	}		
-	
-	
-	
-    public MapModel getAdvancedModel() {
-        return advancedModel;
-    }
-      
-    public void onMarkerSelect(OverlaySelectEvent event) {
-        marker = (Marker) event.getOverlay();
-    }
-      
-    public Marker getMarker() {
-        return marker;
-    }	
 	
 	
 }

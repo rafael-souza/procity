@@ -24,6 +24,16 @@
 				</div>
 			</c:if>
 		</div>	
+  		<script>
+       //<![CDATA[
+             plc.jq(".tabelaSelecao input, .tabelaSelecao select, .tabelaSelecao #corpo\\:formulario\\:id").keydown(
+				function(e){
+                    if (e.wich == 13 || e.keyCode == 13) {
+                           plc.jq("#corpo\\:formulario\\:botaoAcaoPesquisar").click();
+                    }
+             });    
+       //]]>
+       </script>		
 	</ui:composition>
 </div>	
 </body>	

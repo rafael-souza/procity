@@ -84,8 +84,6 @@ public class MinhasTarefasMB extends AbstractOcorrenciaMB  {
 					FotoOcorrencia.class, ocorrencia.getFotoOcorrencia().getId()));
 		}
 		
-		ajustaMarcadorMapa(ocorrencia);        		
-				
 		return retorno;
 	}
 	
@@ -135,9 +133,6 @@ public class MinhasTarefasMB extends AbstractOcorrenciaMB  {
 		
 		// enviando o e-mail ao cidadão
 		sendEmailCidadao(ocorrencia,  "Ocorrência Protocolo: "  + ocorrencia.getProtocolo() + " concluída.");
-		
-		// ajustando o marcador no mapa
-		ajustaMarcadorMapa(ocorrencia);  
 		
 		ocorrencia.setObservacaoHistorico(null);
 	}			

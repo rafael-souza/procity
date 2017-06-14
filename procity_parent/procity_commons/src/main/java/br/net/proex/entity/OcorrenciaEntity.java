@@ -29,29 +29,7 @@ import br.net.proex.enumeration.TipoSecretario;
 @Access(AccessType.FIELD)
 @Audited
 @NamedQueries({
-	@NamedQuery(name="OcorrenciaEntity.queryMan", query="from OcorrenciaEntity"),
-	@NamedQuery(name="OcorrenciaEntity.querySelMinhasTarefas", 
-		query="select obj.id as id, "
-			+ "obj1.id as tipoOcorrencia_id , "
-			+ "obj1.descricao as tipoOcorrencia_descricao, "
-			+ "obj1.secretariaResponsavel as tipoOcorrencia_secretariaResponsavel, "
-			+ "obj.dataOcorrencia as dataOcorrencia, "
-			+ "obj.dataConclusao as dataConclusao, "
-			+ "obj.endereco as endereco, "
-			+ "obj.protocolo as protocolo, "
-			+ "obj.statusOcorrencia as statusOcorrencia, "
-			+ "obj2.id as pessoa_id , "
-			+ "obj2.nome as pessoa_nome, "
-			+ "obj2.email as pessoa_email, "
-			+ "obj.responsavelConclusao as responsavelConclusao, "
-			+ "obj.latitude as latitude, "
-			+ "obj.longitude as longitude "
-			+ "from "
-			+ "OcorrenciaEntity obj "
-			+ "left outer join obj.tipoOcorrencia as obj1 "
-			+ "left outer join obj.pessoa as obj2 "
-			+ "where obj.statusOcorrencia <> 'ABE' "
-			+ "order by obj.id asc"),		
+	@NamedQuery(name="OcorrenciaEntity.queryMan", query="from OcorrenciaEntity"),	
 	@NamedQuery(name="OcorrenciaEntity.querySel", 
 		query="select obj.id as id, "
 			+ "obj1.id as tipoOcorrencia_id , "
@@ -76,6 +54,27 @@ import br.net.proex.enumeration.TipoSecretario;
 			+ "left outer join obj.pessoa as obj2 "
 			+ "left outer join obj.fotoOcorrencia as obj3 "
 			+ "order by obj.id asc"),
+	@NamedQuery(name="OcorrenciaEntity.querySelMinhasTarefas", 
+	query="select obj.id as id, "
+		+ "obj1.id as tipoOcorrencia_id , "
+		+ "obj1.descricao as tipoOcorrencia_descricao, "
+		+ "obj1.secretariaResponsavel as tipoOcorrencia_secretariaResponsavel, "
+		+ "obj.dataOcorrencia as dataOcorrencia, "
+		+ "obj.dataConclusao as dataConclusao, "
+		+ "obj.endereco as endereco, "
+		+ "obj.protocolo as protocolo, "
+		+ "obj.statusOcorrencia as statusOcorrencia, "
+		+ "obj2.id as pessoa_id , "
+		+ "obj2.nome as pessoa_nome, "
+		+ "obj2.email as pessoa_email, "
+		+ "obj.responsavelConclusao as responsavelConclusao, "
+		+ "obj.latitude as latitude, "
+		+ "obj.longitude as longitude "
+		+ "from "
+		+ "OcorrenciaEntity obj "
+		+ "left outer join obj.tipoOcorrencia as obj1 "
+		+ "left outer join obj.pessoa as obj2 "
+		+ "where obj.statusOcorrencia <> 'ABE' order by obj.id asc"),		
 	@NamedQuery(name="OcorrenciaEntity.querySelPorPessoa", 
 		query="select obj "			
 			+ "from "

@@ -73,8 +73,6 @@ public class OcorrenciaMB extends AbstractOcorrenciaMB  {
 			ocorrencia.setFotoOcorrencia((FotoOcorrencia) facade.downloadFile(contextMontaUtil.createContextParamMinimum(),
 					FotoOcorrencia.class, ocorrencia.getFotoOcorrencia().getId()));
 		}
-		
-		ajustaMarcadorMapa(ocorrencia);  
 				
 		return retorno;
 	}
@@ -123,10 +121,7 @@ public class OcorrenciaMB extends AbstractOcorrenciaMB  {
 		sendEmailResponsavel(ocorrencia,"Ocorrência Protocolo: "  + ocorrencia.getProtocolo() + " encaminhada para resolução.");
 		
 		// enviando o e-mail ao cidadão
-		sendEmailCidadao(ocorrencia,  "Ocorrência Protocolo: "  + ocorrencia.getProtocolo() + " encaminhada ao responsável");
-		
-		// ajustando o marcador no mapa
-		ajustaMarcadorMapa(ocorrencia);  
+		sendEmailCidadao(ocorrencia,  "Ocorrência Protocolo: "  + ocorrencia.getProtocolo() + " encaminhada ao responsável");	
 		
 		ocorrencia.setObservacaoHistorico(null);
 	}

@@ -85,23 +85,7 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 	protected void retrieveBefore(I identificadorEntidade) {
 		System.out.println(identificadorEntidade);		
 	};
-	
-	/**
-	 * 
-	 */
-	@Override
-	protected void updateBefore() {
-	
-		super.updateBefore();
-	}
-	
-	/**
-	 * 
-	 */
-	@Override
-	protected void updateAfter() {		
-		log.info(">>>>>>>>>>>>>>> Vai atualizar os produtos com estoque 0");		
-	}
+		
 	
 	/**
 	 * 

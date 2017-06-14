@@ -113,10 +113,23 @@
 			</ul>
 		</li>
 		<!-- 	
-				<ui:include src="/WEB-INF/fcls-plc/geralMenuAjuda.xhtml"/>
+		<ui:include src="/WEB-INF/fcls-plc/geralMenuAjuda.xhtml"/>
 		<ui:include src="/WEB-INF/fcls-plc/geralMenuPrefLang.xhtml"/>
 		<ui:include src="/WEB-INF/fcls-plc/geralMenuAreaTecnica.xhtml"/>
 		<ui:include src="/WEB-INF/fcls-plc/geralMenuDinamico.xhtml" />
 		<ui:include src="/WEB-INF/fcls-plc/geralMenuThemeSwitcher.xhtml"/> -->
 	</ul>
+
+	<script type="text/javascript">
+	 //<![CDATA[	 
+	 	plc.jq( document ).ready(function() {
+			plc.jq(".plc-menu-sistema").find("li > ul").each(function(){
+				   var ul = plc.jq(this);
+				   if (ul.children("li").length === 0) {
+						 ul.parent().remove();
+				   }
+			});
+	 	});
+	 //]]>
+    </script>	
 </ui:composition>

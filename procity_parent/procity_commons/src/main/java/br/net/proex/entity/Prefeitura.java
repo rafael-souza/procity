@@ -29,9 +29,7 @@ public abstract class Prefeitura extends AppBaseEntity {
 
 	
 	@OneToMany (targetEntity = br.net.proex.entity.SecretariadoEntity.class, fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="prefeitura")
-	@ForeignKey(name="FK_SECRETARIADO_PREFEITURA")
-	@PlcValDuplicity(property="tipo")
-	@PlcValMultiplicity(referenceProperty="tipo",  message="{jcompany.aplicacao.mestredetalhe.multiplicidade.SecretariadoEntity}")
+	@ForeignKey(name="FK_SECRETARIADO_PREFEITURA")	
 	@Valid
 	private List<SecretariadoEntity> secretariado;
 

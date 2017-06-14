@@ -10,6 +10,8 @@
 	xmlns:tr="http://myfaces.apache.org/trinidad" 
 	xmlns:trh="http://myfaces.apache.org/trinidad/html">  
 	<ui:composition> 
+<fieldset class="plc-fieldset"> 
+		<legend class="plc-fieldset-legend">Secretariado</legend> 	
 		<plcf:iteracao var="secretariado" id="secretariado" value="#{prefeitura.secretariado}" columnClasses="celulaFormulario" headerClass="celulaFormulario"> 
 			<h:column> 
 				<h:outputText value="#{rowCounter.index}."/> 
@@ -46,6 +48,7 @@
 					onkeydown="selecionaPorTecla(event,this);" obrigatorio="S"/> 
 			</h:column> 
 		</plcf:iteracao> 
+	</fieldset> 
 		<script type="text/javascript">
 			applyCheckTarja("secretariado");
 		</script>
