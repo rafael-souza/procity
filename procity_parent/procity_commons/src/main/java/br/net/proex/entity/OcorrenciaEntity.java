@@ -54,7 +54,7 @@ import br.net.proex.enumeration.TipoSecretario;
 			+ "left outer join obj.pessoa as obj2 "
 			+ "left outer join obj.fotoOcorrencia as obj3 "
 			+ "order by obj.id asc"),
-	@NamedQuery(name="OcorrenciaEntity.querySelMinhasTarefas", 
+	@NamedQuery(name="OcorrenciaEntity.queryMinhasTarefas", 
 	query="select obj.id as id, "
 		+ "obj1.id as tipoOcorrencia_id , "
 		+ "obj1.descricao as tipoOcorrencia_descricao, "
@@ -108,6 +108,9 @@ public class OcorrenciaEntity extends Ocorrencia {
 	
 	@Transient
 	private String fotoApp;	
+	
+	@Transient
+	private StatusOcorrencia statusDiferenteABE;
  	
     /*
      * Construtor padrao
@@ -277,6 +280,18 @@ public class OcorrenciaEntity extends Ocorrencia {
 	 */
 	public void setFotoApp(String fotoApp) {
 		this.fotoApp = fotoApp;
+	}
+	/**
+	 * @return the statusDiferenteABE
+	 */
+	public StatusOcorrencia getStatusDiferenteABE() {
+		return statusDiferenteABE;
+	}
+	/**
+	 * @param statusDiferenteABE the statusDiferenteABE to set
+	 */
+	public void setStatusDiferenteABE(StatusOcorrencia statusDiferenteABE) {
+		this.statusDiferenteABE = statusDiferenteABE;
 	}
 
 

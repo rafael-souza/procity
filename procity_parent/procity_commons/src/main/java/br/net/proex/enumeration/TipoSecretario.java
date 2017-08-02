@@ -19,8 +19,15 @@ public enum TipoSecretario {
 	FIN("{tipoSecretario.FIN}"),
 	PLA("{tipoSecretario.PLA}"),
 	SAU("{tipoSecretario.SAU}"),
-	JUR("{tipoSecretario.JUR}");
-
+	JUR("{tipoSecretario.JUR}"),
+	FAZ("{tipoSecretario.FAZ}"),
+	CON("{tipoSecretario.CON}"),
+	GAB("{tipoSecretario.GAB}"),
+	PRO("{tipoSecretario.PRO}"),
+	OUV("{tipoSecretario.OUV}"),
+	PRF("{tipoSecretario.PRF}"),
+	SAA("{tipoSecretario.SAA}");
+	
 	
     /**
      * @return Retorna o codigo.

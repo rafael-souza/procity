@@ -45,7 +45,9 @@ public class OcorrenciaDAO extends AppJpaDAO  {
 			@PlcQueryParameter(name="dataConclusao", expression="obj.dataConclusao = :dataConclusao  ") Date dataConclusao,
 			@PlcQueryParameter(name="endereco", expression="obj.endereco like '%' || :endereco || '%' ") String endereco,
 			@PlcQueryParameter(name="statusOcorrencia", expression="obj.statusOcorrencia = :statusOcorrencia") StatusOcorrencia statusOcorrencia,
-			@PlcQueryParameter(name="protocolo", expression="obj.protocolo like :protocolo || '%' ") String protocolo
+			@PlcQueryParameter(name="protocolo", expression="obj.protocolo like :protocolo || '%' ") String protocolo,
+			@PlcQueryParameter(name="statusDiferenteABE", expression="obj.statusOcorrencia <> :statusDiferenteABE") StatusOcorrencia statusDiferenteABE,
+			@PlcQueryParameter(name="listaSecretaria", expression="obj1.secretariaResponsavel in (:listaSecretaria) ") List<TipoSecretario> listaSecretaria
 	);
 
 	@PlcQuery("querySel")
@@ -58,41 +60,11 @@ public class OcorrenciaDAO extends AppJpaDAO  {
 			@PlcQueryParameter(name="dataConclusao", expression="obj.dataConclusao = :dataConclusao  ") Date dataConclusao,
 			@PlcQueryParameter(name="endereco", expression="obj.endereco like '%' || :endereco || '%' ") String endereco,
 			@PlcQueryParameter(name="statusOcorrencia", expression="obj.statusOcorrencia = :statusOcorrencia") StatusOcorrencia statusOcorrencia,
-			@PlcQueryParameter(name="protocolo", expression="obj.protocolo like :protocolo || '%' ") String protocolo
-	);
-	
-
-	
-	@PlcQuery("querySelMinhasTarefas")
-	public native List<OcorrenciaEntity> findList(
-			PlcBaseContextVO context,
-			@PlcQueryOrderBy String dynamicOrderByPlc,
-			@PlcQueryFirstLine Integer primeiraLinhaPlc, 
-			@PlcQueryLineAmount Integer numeroLinhasPlc,		   
-			
-			@PlcQueryParameter(name="id", expression="obj.id = :id") Long id,
-			@PlcQueryParameter(name="tipoOcorrencia", expression="obj1 = :tipoOcorrencia") TipoOcorrenciaEntity tipoOcorrencia,
-			@PlcQueryParameter(name="dataOcorrencia", expression="obj.dataOcorrencia = :dataOcorrencia  ") Date dataOcorrencia,
-			@PlcQueryParameter(name="dataConclusao", expression="obj.dataConclusao = :dataConclusao  ") Date dataConclusao,
-			@PlcQueryParameter(name="endereco", expression="obj.endereco like '%' || :endereco || '%' ") String endereco,
-			@PlcQueryParameter(name="statusOcorrencia", expression="obj.statusOcorrencia = :statusOcorrencia") StatusOcorrencia statusOcorrencia,
 			@PlcQueryParameter(name="protocolo", expression="obj.protocolo like :protocolo || '%' ") String protocolo,
-			@PlcQueryParameter(name="listaSecretaria", expression="obj1.secretariaResponsavel in (:listaSecretaria) ") List<TipoSecretario> listaSecretaria 
-	);
-
-	@PlcQuery("querySelMinhasTarefas")
-	public native Long findCount(
-			PlcBaseContextVO context,
-			
-			@PlcQueryParameter(name="id", expression="obj.id = :id") Long id,
-			@PlcQueryParameter(name="tipoOcorrencia", expression="obj1 = :tipoOcorrencia") TipoOcorrenciaEntity tipoOcorrencia,
-			@PlcQueryParameter(name="dataOcorrencia", expression="obj.dataOcorrencia = :dataOcorrencia  ") Date dataOcorrencia,
-			@PlcQueryParameter(name="dataConclusao", expression="obj.dataConclusao = :dataConclusao  ") Date dataConclusao,
-			@PlcQueryParameter(name="endereco", expression="obj.endereco like '%' || :endereco || '%' ") String endereco,
-			@PlcQueryParameter(name="statusOcorrencia", expression="obj.statusOcorrencia = :statusOcorrencia") StatusOcorrencia statusOcorrencia,
-			@PlcQueryParameter(name="protocolo", expression="obj.protocolo like :protocolo || '%' ") String protocolo,
+			@PlcQueryParameter(name="statusDiferenteABE", expression="obj.statusOcorrencia <> :statusDiferenteABE") StatusOcorrencia statusDiferenteABE,			
 			@PlcQueryParameter(name="listaSecretaria", expression="obj1.secretariaResponsavel in (:listaSecretaria) ") List<TipoSecretario> listaSecretaria
-	);		
+	);
+	
 
 	/**
 	 * 

@@ -18,6 +18,7 @@ import br.net.proex.commons.AppUserProfileVO;
 import br.net.proex.entity.OcorrenciaEntity;
 import br.net.proex.entity.PrefeituraEntity;
 import br.net.proex.entity.SecretariadoEntity;
+import br.net.proex.enumeration.StatusOcorrencia;
 import br.net.proex.enumeration.TipoSecretario;
 import br.net.proex.facade.IAppFacade;
 
@@ -57,13 +58,13 @@ public class MinhasTarefasController extends AppBaseGridController<OcorrenciaEnt
 			}								
 		}
 		
-		ocorrencia.setListaSecretaria(listaSecretaria);			
+		ocorrencia.setListaSecretaria(listaSecretaria);		
 		
 		try {
 
 			PlcBaseContextVO context = getContext();
 			// neste ponto seto a query que faz filtro 
-			getContext().setApiQuerySel("querySelMinhasTarefas");
+			//getContext().setApiQuerySel("queryMinhasTarefas");
 
 			String orderByDinamico = "";
 			if (StringUtils.isNotEmpty(getOrderBy())) {
@@ -77,6 +78,8 @@ public class MinhasTarefasController extends AppBaseGridController<OcorrenciaEnt
 			if (null == ((OcorrenciaEntity)instancia).getListaSecretaria()){
 				((OcorrenciaEntity)instancia).setListaSecretaria(listaSecretaria);
 			}
+			
+			((OcorrenciaEntity)instancia).setStatusDiferenteABE(StatusOcorrencia.ABE);
 
 			this.retrieveCollectionBefore();
 
@@ -98,7 +101,7 @@ public class MinhasTarefasController extends AppBaseGridController<OcorrenciaEnt
 			// recuperando a lista dos id´s
 			recuperaListaIdParaNavegacao();
 
-			getContext().setApiQuerySel(null);
+			//getContext().setApiQuerySel(null);
 
 		} catch (Exception e) {
 			handleExceptions(e);
