@@ -10,10 +10,10 @@
 				</a>
 				<ul class="ui-state-hover">
 					<li>
-					<a href="#{request.contextPath}/f/n/mapaocorrencias?evento=y">
-						<h:outputText value="#{msg['menu.mapaocorrencias.titulo']}">Mapa de Ocorrências</h:outputText>
-					</a>
-				</li>
+						<a href="#{request.contextPath}/f/n/mapaocorrencias?evento=y">
+							<h:outputText value="#{msg['menu.mapaocorrencias.titulo']}">Mapa de Ocorrências</h:outputText>
+						</a>
+					</li>
 				</ul>
 			</li>
 			<li>
@@ -32,11 +32,11 @@
 						<h:outputText value="#{msg['menu.logradouro.titulo']}">Logradouros</h:outputText>
 					</a>
 				</li> -->
-					<li>
-						<a href="#{request.contextPath}/f/n/parametrosaplicacao">
-							<h:outputText value="#{msg['menu.parametrosaplicacao.titulo']}">Parâmetros da Aplicação</h:outputText>
-						</a>
-					</li>				
+				<li>
+					<a href="#{request.contextPath}/f/n/parametrosaplicacao">
+						<h:outputText value="#{msg['menu.parametrosaplicacao.titulo']}">Parâmetros da Aplicação</h:outputText>
+					</a>
+				</li>
 				<li>
 					<a href="#{request.contextPath}/f/n/pessoasel">
 						<h:outputText value="#{msg['menu.pessoa.titulo']}">Pessoas</h:outputText>
@@ -66,6 +66,16 @@
 						<h:outputText value="#{msg['menu.ocorrencia.titulo']}">Ocorrências</h:outputText>
 					</a>
 				</li>
+				<li>
+					<a href="#{request.contextPath}/f/n/sugestaosel">
+						<h:outputText value="#{msg['menu.sugestao.titulo']}">Sugestões</h:outputText>
+					</a>
+				</li>
+				<li>
+						<a href="#{request.contextPath}/f/n/denunciasel">
+							<h:outputText value="#{msg['menu.denuncia.titulo']}">Central de Denúncias</h:outputText>
+						</a>
+					</li>
 				<li>
 					<a href="#{request.contextPath}/f/n/minhastarefassel">
 						<h:outputText value="#{msg['menu.minhastarefas.titulo']}">Minhas Tarefas</h:outputText>
@@ -119,7 +129,6 @@
 		<ui:include src="/WEB-INF/fcls-plc/geralMenuDinamico.xhtml" />
 		<ui:include src="/WEB-INF/fcls-plc/geralMenuThemeSwitcher.xhtml"/> -->
 	</ul>
-
 	<script type="text/javascript">
 	 //<![CDATA[	 
 	 	plc.jq( document ).ready(function() {
@@ -131,5 +140,5 @@
 			});
 	 	});
 	 //]]>
-    </script>	
+	</script>
 </ui:composition>

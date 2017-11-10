@@ -18,7 +18,6 @@ import org.apache.log4j.Logger;
 
 import com.powerlogic.jcompany.commons.PlcException;
 import com.powerlogic.jcompany.commons.config.qualifiers.QPlcDefault;
-import com.powerlogic.jcompany.commons.facade.IPlcFacade;
 import com.powerlogic.jcompany.commons.util.metamodel.PlcMetamodelUtil;
 import com.powerlogic.jcompany.controller.jsf.util.PlcCreateContextUtil;
 import com.powerlogic.jcompany.controller.rest.api.qualifiers.QPlcControllerName;
@@ -27,11 +26,15 @@ import com.powerlogic.jcompany.controller.rest.api.stereotypes.SPlcController;
 import com.powerlogic.jcompany.controller.rest.controllers.PlcBaseDynamicController;
 import com.powerlogic.jcompany.controller.util.PlcBeanPopulateUtil;
 
+import br.net.proex.entity.DenunciaEntity;
 import br.net.proex.entity.FotoConteudoOcorrencia;
 import br.net.proex.entity.FotoOcorrencia;
 import br.net.proex.entity.OcorrenciaEntity;
 import br.net.proex.entity.PessoaEntity;
+import br.net.proex.entity.SugestaoEntity;
 import br.net.proex.enumeration.StatusOcorrencia;
+import br.net.proex.enumeration.StatusSugestao;
+import br.net.proex.enumeration.TipoSugestao;
 import br.net.proex.facade.IAppFacade;
 
 /**
@@ -116,7 +119,7 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 			ocorrencia.setStatusOcorrencia(StatusOcorrencia.ABE);
 			ocorrencia.setPessoa(facade.findPessoaByEmail(contextMontaUtil.createContextParamMinimum(), ocorrencia.getPessoa().getEmail()));
 			// verificando se as fotos foram tiradas
-			if(null != ocorrencia.getFotoApp()){
+			if(null != ocorrencia.getFotoApp() && ocorrencia.getFotoApp().contains(",")){
 				try {
 					String base64Image = ocorrencia.getFotoApp().replace(" ", "+").split(",")[1];
 					byte[] fotoFachada = Base64.getDecoder().decode(base64Image.getBytes());
@@ -137,9 +140,49 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 					e.printStackTrace();
 				}
 			}	
-		}
+		} else if (getEntity() instanceof SugestaoEntity) {
+			SugestaoEntity sugestao = (SugestaoEntity) getEntity();
+			sugestao.setDataSugestao(new Date());
+			sugestao.setTipoSugestao(getTipoSugestao(sugestao.getDescTipo()));
+			sugestao.setStatus(StatusSugestao.ENV);
+			sugestao.setPessoa(facade.findPessoaByEmail(contextMontaUtil.createContextParamMinimum(), sugestao.getPessoa().getEmail()));
+		} else if (getEntity() instanceof DenunciaEntity) {
+			DenunciaEntity denuncia = (DenunciaEntity) getEntity();
+			denuncia.setDataDenuncia(new Date());
+			// caso não seja uma denuncia anonima busca a pessoa que esta criando
+			if (null != denuncia.getPessoa() && null != denuncia.getPessoa().getEmail()){
+				denuncia.setPessoa(facade.findPessoaByEmail(contextMontaUtil.createContextParamMinimum(), denuncia.getPessoa().getEmail()));
+				denuncia.setDenunciaAnonima(Boolean.FALSE);
+			} else {
+				denuncia.setDenunciaAnonima(Boolean.TRUE);
+			}
+		} 
 	}
 	
+	/**
+	 * retorna o tipo da descrição em forma de enum
+	 * @param descTipo
+	 * @return
+	 */
+	private TipoSugestao getTipoSugestao(String descTipo) {
+		// verificando o tipo da sugestao
+		if (descTipo.equals("EDUC")){
+			return TipoSugestao.EDUC;
+		} else if (descTipo.equals("SAUD")){
+			return TipoSugestao.SAUD;
+		} else if (descTipo.equals("ESPO")){
+			return TipoSugestao.ESPO;
+		} else if (descTipo.equals("TURI")){
+			return TipoSugestao.TURI;
+		} else if (descTipo.equals("MEIO")){
+			return TipoSugestao.MEIO;
+		} else if (descTipo.equals("INFR")){
+			return TipoSugestao.INFR;
+		} else {
+			return TipoSugestao.OUTR;
+		}	
+	}
+
 	/**
 	 * 
 	 */
@@ -168,6 +211,15 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 				((OcorrenciaEntity) this.getEntity()).setPessoa(pessoa);
 			}
 			
+			if (getEntity() instanceof SugestaoEntity){
+				((SugestaoEntity) this.getEntity()).setProtocolo(getProtocoloToken());
+			}
+			
+			if (getEntity() instanceof DenunciaEntity){
+				((DenunciaEntity) this.getEntity()).setProtocolo(getProtocoloToken());
+			}
+			
+			
 			// recupera coleção sem paginação
 			retrieveCollectionBefore();						
 						
@@ -179,6 +231,12 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 					if (getEntity() instanceof OcorrenciaEntity){
 						//define quantidade de linhas para retornar na busca ao BD - 0 ilimitado
 						setEntityCollection(ajustarFoto(facade.findOcorrenciaPorPessoa(contextMontaUtil.createContextParamMinimum(), ((OcorrenciaEntity)getEntity()).getPessoa().getId())));
+					} else if (getEntity() instanceof SugestaoEntity) {
+						SugestaoEntity sugestao = (SugestaoEntity) getEntity();
+						setEntityCollection((Collection<E>)facade.buscarSugestaoPorProtocolo(getContext(), sugestao.getProtocolo()));
+					} else if (getEntity() instanceof DenunciaEntity) {
+						DenunciaEntity denuncia = (DenunciaEntity) getEntity();
+						setEntityCollection((Collection<E>)facade.buscarDenunciaPorProtocolo(getContext(), denuncia.getProtocolo()));
 					} else {
 						setEntityCollection(facade.findList(getContext(), getEntity(), getCollectionOrder(), -1, 0));
 					}
@@ -233,6 +291,13 @@ public class MobileController<E, I> extends PlcBaseDynamicController<E, I> {
 	 */
 	private String getUsuarioToken() {
 		return token.substring(token.indexOf("(") + 1, token.lastIndexOf(")"));
+	}
+	
+	/**
+	 * Returna o conteudo do protocolo colocado após o ?
+	 */
+	private String getProtocoloToken() {
+		return token.substring(token.indexOf("protocolo=") + 10);
 	}
 
 	/**

@@ -10,18 +10,22 @@ import com.powerlogic.jcompany.commons.config.qualifiers.QPlcDefault;
 import com.powerlogic.jcompany.commons.config.stereotypes.SPlcFacade;
 import com.powerlogic.jcompany.facade.PlcFacadeImpl;
 
+import br.net.proex.entity.DenunciaEntity;
 import br.net.proex.entity.OcorrenciaEntity;
 import br.net.proex.entity.PessoaEntity;
 import br.net.proex.entity.PrefeituraEntity;
+import br.net.proex.entity.SugestaoEntity;
 import br.net.proex.entity.seg.SegMenuEntity;
 import br.net.proex.entity.seg.SegPerfilEntity;
 import br.net.proex.entity.seg.SegUsuarioEntity;
+import br.net.proex.persistence.jpa.DenunciaDAO;
 import br.net.proex.persistence.jpa.OcorrenciaDAO;
 import br.net.proex.persistence.jpa.PessoaDAO;
 import br.net.proex.persistence.jpa.PrefeituraDAO;
 import br.net.proex.persistence.jpa.SegMenuDAO;
 import br.net.proex.persistence.jpa.SegPerfilDAO;
 import br.net.proex.persistence.jpa.SegUsuarioDAO;
+import br.net.proex.persistence.jpa.SugestaoDAO;
 
 @QPlcDefault
 @SPlcFacade
@@ -44,6 +48,12 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade{
 	
 	@Inject 
 	private OcorrenciaDAO ocorrenciaDAO;
+	
+	@Inject 
+	private SugestaoDAO sugestaoDAO;
+	
+	@Inject
+	private DenunciaDAO denunciaDAO;
 	
 	
 
@@ -89,6 +99,16 @@ public class AppFacadeImpl extends PlcFacadeImpl implements IAppFacade{
 	@Override
 	public OcorrenciaEntity findOcorrenciaById(PlcBaseContextVO context, Long id) {
 		return (OcorrenciaEntity)ocorrenciaDAO.findById(context, OcorrenciaEntity.class, id);
+	}
+
+	@Override
+	public List<SugestaoEntity> buscarSugestaoPorProtocolo(PlcBaseContextVO context, String protocolo) {
+		return sugestaoDAO.buscarSugestaoPorProtocolo(context, protocolo);
+	}
+
+	@Override
+	public List<DenunciaEntity> buscarDenunciaPorProtocolo(PlcBaseContextVO context, String protocolo) {
+		return denunciaDAO.buscarDenunciaPorProtocolo(context, protocolo);
 	}
 	
 }

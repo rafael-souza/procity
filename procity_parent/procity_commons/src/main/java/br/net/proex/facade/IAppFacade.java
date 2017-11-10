@@ -1,13 +1,16 @@
 package br.net.proex.facade;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.powerlogic.jcompany.commons.PlcBaseContextVO;
 import com.powerlogic.jcompany.commons.facade.IPlcFacade;
 
+import br.net.proex.entity.DenunciaEntity;
 import br.net.proex.entity.OcorrenciaEntity;
 import br.net.proex.entity.PessoaEntity;
 import br.net.proex.entity.PrefeituraEntity;
+import br.net.proex.entity.SugestaoEntity;
 import br.net.proex.entity.seg.SegMenuEntity;
 import br.net.proex.entity.seg.SegPerfilEntity;
 import br.net.proex.entity.seg.SegUsuarioEntity;
@@ -29,5 +32,9 @@ public interface IAppFacade extends IPlcFacade{
 	List<OcorrenciaEntity> findOcorrenciaPorPessoa(PlcBaseContextVO context, Long id);
 
 	OcorrenciaEntity findOcorrenciaById(PlcBaseContextVO context, Long id);
+
+	List<SugestaoEntity> buscarSugestaoPorProtocolo(PlcBaseContextVO context, String protocolo);
+
+	List<DenunciaEntity> buscarDenunciaPorProtocolo(PlcBaseContextVO context,String protocolo);
 	
 }

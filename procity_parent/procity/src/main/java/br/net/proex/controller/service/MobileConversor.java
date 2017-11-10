@@ -105,7 +105,7 @@ public class MobileConversor<C> extends MobileJsonConversor<C> {
 		MobUtil util = PlcCDIUtil.getInstance().getInstanceByType(MobUtil.class, QPlcDefaultLiteral.INSTANCE);
 		
 		// verificando se é o cadastro do ususario
-		if (null != container.getToken() && container.getToken().contains("cadastro")){
+		if (null != container.getToken() && (container.getToken().contains("cadastro") || container.getToken().contains("protocolo"))){
 			return true;
 		}
 		
